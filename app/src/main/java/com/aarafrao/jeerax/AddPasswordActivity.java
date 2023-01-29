@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.aarafrao.jeerax.databinding.ActivityAddPasswordBinding;
 import com.aarafrao.jeerax.databinding.BottomSheetLayoutBinding;
@@ -22,20 +23,29 @@ public class AddPasswordActivity extends AppCompatActivity {
     ActivityAddPasswordBinding binding;
     private BottomSheetBehavior bottomSheetBehavior;
     BottomSheetLayoutBinding binding2;
+    TextView txtMain;
+    Slider seekbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAddPasswordBinding.inflate(getLayoutInflater());
+        binding2 = BottomSheetLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         ConstraintLayout bottomSheetLayout = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
+        txtMain = findViewById(R.id.txtMain);
+        seekbar = findViewById(R.id.seekbar);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        String v1 = getRandomString((int) 10);
+        txtMain.setText(v1);
 
-        binding2.seekbar.addOnChangeListener((slider, value, fromUser) -> {
-            binding2.txtMain.setText(getRandomString((int) value));
+        seekbar.addOnChangeListener((slider, value, fromUser) -> {
+            txtMain.setText(getRandomString((int) value));
         });
+
+
         binding.edPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
