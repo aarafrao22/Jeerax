@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
         rvList.add(new ItemModel("YT", R.drawable.ic_launcher_foreground));
         rvList.add(new ItemModel("Facebook", R.drawable.ic_launcher_foreground));
         rvList.add(new ItemModel("Whatsapp", R.drawable.ic_launcher_foreground));
+
         RvAdapter rvAdapter = new RvAdapter(rvList, getApplicationContext());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.recyclerView.setLayoutManager(layoutManager);

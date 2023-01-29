@@ -1,17 +1,34 @@
 package com.aarafrao.jeerax;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+
+import com.aarafrao.jeerax.databinding.ActivityAddPasswordBinding;
+import com.aarafrao.jeerax.databinding.BottomSheetLayoutBinding;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.Random;
 
 public class AddPasswordActivity extends AppCompatActivity {
 
+    ActivityAddPasswordBinding binding;
+    private BottomSheetBehavior bottomSheetBehavior;
+    BottomSheetLayoutBinding binding2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_password);
+        binding = ActivityAddPasswordBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+
+        ConstraintLayout bottomSheetLayout = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
     }
 
     private static final String ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm";
