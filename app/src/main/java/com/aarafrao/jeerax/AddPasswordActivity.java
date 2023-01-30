@@ -73,6 +73,7 @@ public class AddPasswordActivity extends AppCompatActivity {
 
             }
         });
+
         binding.edPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -88,6 +89,7 @@ public class AddPasswordActivity extends AppCompatActivity {
 
             }
         });
+
         binding.btnGenerate.setOnClickListener(v ->
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
         );
