@@ -48,41 +48,15 @@ public class HomeActivity extends AppCompatActivity {
 
             String context = notifications.get(i).getContext();
             int img;
-            switch (context) {
-
-                case "1":
-                    img = R.drawable.battery_disconnected;
-                    break;
-
-                case "2":
-                    img = R.drawable.battery_connected;
-                    break;
-
-                case "3":
-                    img = R.drawable.fence;
-                    break;
-
-                case "4":
-                    img = R.drawable.ig_on;
-                    break;
-
-                case "5":
-                    img = R.drawable.ig_of;
-                    break;
-
-                default:
-                    img = R.drawable.logopie;
-                    break;
-            }
-            try {
-                if (rvList.size() > 0) {
-                    rvList.add(rvList.size() - i, new NotificationModel(img, notifications.get(i).getTitle(), notifications.get(i).getMessage(), unixToDate(notifications.get(i).getTime())));
-
-                }
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                if (rvList.size() > 0) {
+//                    rvList.add(rvList.size() - i, new NotificationModel(img, notifications.get(i).getTitle(), notifications.get(i).getMessage(), unixToDate(notifications.get(i).getTime())));
+//
+//                }
+//
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
         }
 
         RvAdapter rvAdapter = new RvAdapter(rvList, getApplicationContext());

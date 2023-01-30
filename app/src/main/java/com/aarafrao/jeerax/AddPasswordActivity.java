@@ -1,15 +1,12 @@
 package com.aarafrao.jeerax;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +24,7 @@ public class AddPasswordActivity extends AppCompatActivity {
     private ActivityAddPasswordBinding binding;
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetLayoutBinding binding2;
-    private MaterialCheckBox checkBox1, checkBox2, checkBox3;
+    private MaterialCheckBox checkDIgits, checkAlpha, checkSymbol;
     private TextView txtMain;
     private String generatedPassword = "";
     private Slider seekbar;
@@ -48,7 +45,7 @@ public class AddPasswordActivity extends AppCompatActivity {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
         txtMain = findViewById(R.id.txtMain);
         seekbar = findViewById(R.id.seekbar);
-        btnUsePassword = findViewById(R.id.btnUsePassword);
+        btnUsePassword = findViewById(R.id.btnSave);
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         String v1 = getRandomString((int) 10);
@@ -61,18 +58,39 @@ public class AddPasswordActivity extends AppCompatActivity {
             txtMain.setText(getRandomString((int) value));
         });
 
-        checkBox1 = findViewById(R.id.check1);
-        checkBox2 = findViewById(R.id.check2);
-        checkBox3 = findViewById(R.id.check3);
 
-        checkBox1.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "UNChecked", Toast.LENGTH_SHORT).show();
+        checkDIgits = findViewById(R.id.checkDigit);
+        checkAlpha = findViewById(R.id.checkAlpha);
+        checkSymbol = findViewById(R.id.checkSymbol);
 
-            }
-        });
+        checkDIgits.setChecked(true);
+        checkAlpha.setChecked(true);
+        checkSymbol.setChecked(true);
+
+//        checkDIgits.setOnCheckedChangeListener((compoundButton, b) -> {
+//            if (b) {
+//                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
+//                ALLOWED_CHARACTERS = ALLOWED_CHARACTERS1;
+//            } else {
+//                ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
+//            }
+//        });
+//        checkAlpha.setOnCheckedChangeListener((compoundButton, b) -> {
+//            if (b) {
+//                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
+//                ALLOWED_CHARACTERS = ALLOWED_CHARACTERS1;
+//            } else {
+//                ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
+//            }
+//        });
+//        checkSymbol.setOnCheckedChangeListener((compoundButton, b) -> {
+//            if (b) {
+//                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
+//                ALLOWED_CHARACTERS = ALLOWED_CHARACTERS1;
+//            } else {
+//                ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
+//            }
+//        });
 
         binding.edPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -90,9 +108,29 @@ public class AddPasswordActivity extends AppCompatActivity {
             }
         });
 
-        binding.btnGenerate.setOnClickListener(v ->
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-        );
+        binding.btnGenerate.setOnClickListener(v -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
+
+        binding.btnSave.setOnClickListener(v -> {
+            if (binding.edName.getText().toString().equals("")) {
+                if (binding.edLogin.getText().toString().equals("")) {
+                    if (binding.edPassword.getText().toString().equals("")) {
+                        if (binding.edComment.getText().toString().equals("")) {
+
+                            //SaveInDatabase
+                            Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
+                        } else
+                            binding.edComment.setError("Enter");
+
+                    } else
+                        binding.edPassword.setError("Enter ");
+
+                } else
+                    binding.edLogin.setError("Enter MAIL");
+
+            } else {
+                binding.edName.setError("Enter Name");
+            }
+        });
     }
 
 
