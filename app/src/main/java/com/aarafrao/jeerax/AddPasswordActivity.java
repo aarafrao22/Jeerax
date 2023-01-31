@@ -3,6 +3,7 @@ package com.aarafrao.jeerax;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aarafrao.jeerax.Database.DatabaseHelper;
+import com.aarafrao.jeerax.Database.Notification;
 import com.aarafrao.jeerax.databinding.ActivityAddPasswordBinding;
 import com.aarafrao.jeerax.databinding.BottomSheetLayoutBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -66,7 +69,7 @@ public class AddPasswordActivity extends AppCompatActivity {
         checkDIgits.setChecked(true);
         checkAlpha.setChecked(true);
         checkSymbol.setChecked(true);
-
+        binding.imgClose.setOnClickListener(v -> finish());
 //        checkDIgits.setOnCheckedChangeListener((compoundButton, b) -> {
 //            if (b) {
 //                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
@@ -120,8 +123,13 @@ public class AddPasswordActivity extends AppCompatActivity {
 
                         if (!binding.edComment.getText().toString().equals("")) {
 
-                            //SaveInDatabase
+                            //SaveInDatabase On Firebase and ROOM
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
+                            DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
+                            databaseHelper.notificationDAO().addNotification(new Notification(binding.edName.getText().toString(), binding.edPassword.getText().toString()));
+                            Intent intent = new Intent(AddPasswordActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
 
                         } else
                             binding.edCommentLayout.setError("Enter");
