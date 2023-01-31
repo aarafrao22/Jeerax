@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "283167175837",
+    "project_id": "jeerax-75da4",
+    "storage_bucket": "jeerax-75da4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283167175837:android:f6a02f86d74a2f12835074",
+        "android_client_info": {
+          "package_name": "com.aarafrao.jeerax"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "283167175837-rl3vit9sngghna7soan8u63dpaif0tob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABTUWpyn1AAkazq2rMxRoGo9tRs7UWLL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "283167175837-rl3vit9sngghna7soan8u63dpaif0tob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

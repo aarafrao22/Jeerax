@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_bg"
+    android:backgroundTint="#f0f0f0"
     tools:context=".SignupActivity">
 
 
@@ -23,56 +24,25 @@
         android:id="@+id/txtSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="Sign Up"
-        android:textColor="@color/white"
-        android:textSize="32dp"
+        android:textColor="@color/black"
+        android:textSize="24dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="Enter your details  and start\nshopping!"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSignIn" />
-
-    <TextView
-        android:id="@+id/txtPassDisc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:text="Password must be at least 8 characters"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="@+id/edEmail"
-        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
-
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edName"
+        android:id="@+id/edEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/filled_button"
         android:backgroundTint="@color/white"
@@ -84,10 +54,10 @@
         android:textColorHint="#9E9C9C"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtSignIn" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edSirName"
+        android:id="@+id/edReminder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -96,18 +66,17 @@
         android:background="@drawable/filled_button"
         android:backgroundTint="@color/white"
         android:ems="10"
-        android:hint="Full Name"
+        android:hint="Reminder (Optional)"
         android:inputType="textEmailAddress"
         android:padding="12dp"
         android:textColor="@color/black"
         android:textColorHint="#9E9C9C"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edName" />
+        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edEmail"
+        android:id="@+id/edMasterPass"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -116,32 +85,85 @@
         android:background="@drawable/filled_button"
         android:backgroundTint="@color/white"
         android:ems="10"
-        android:hint="Password"
+        android:hint="Master Password"
         android:inputType="textPassword"
         android:padding="12dp"
         android:textColor="@color/black"
         android:textColorHint="#9E9C9C"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edSirName" />
+        app:layout_constraintTop_toBottomOf="@+id/edReminder" />
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edConfMasterPass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/filled_button"
+        android:backgroundTint="@color/white"
+        android:ems="10"
+        android:hint="Confirm Master Password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="#9E9C9C"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check1UpperCase" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkA12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="22dp"
+        android:text="At least 12 Characters"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edMasterPass" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check1no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="At least 1 number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkA12" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check1lowercase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="At least 1 number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check1no" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check1UpperCase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="At least 1 number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check1lowercase" />
 
     <Button
         android:id="@+id/btnContinue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="68dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/filled_button"
         android:padding="8dp"
         android:text="Sign Up"
         android:textAllCaps="false"
-        android:textColor="@color/purple_500"
-        app:backgroundTint="@color/white"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/edConfMasterPass" />
 
     <TextView
         android:id="@+id/sign_up_already_have"
@@ -152,7 +174,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:text="Already Have an Account? Sign In"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

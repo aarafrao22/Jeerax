@@ -98,15 +98,18 @@ public class AddPasswordActivity extends AppCompatActivity {
         binding.edPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                binding.btnGenerate.setVisibility(View.VISIBLE);
+
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                binding.edPassword.setText("");
+                binding.btnGenerate.setVisibility(View.VISIBLE);
 
             }
         });
@@ -124,6 +127,7 @@ public class AddPasswordActivity extends AppCompatActivity {
                         if (!binding.edComment.getText().toString().equals("")) {
 
                             //SaveInDatabase On Firebase and ROOM
+
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
                             DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
                             databaseHelper.notificationDAO().addNotification(new Notification(binding.edName.getText().toString(), binding.edPassword.getText().toString()));
