@@ -10,71 +10,46 @@ public class Notification {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = "title")
-    private String title;
+    @ColumnInfo(name = "name")
+    private String name;
 
-    @ColumnInfo(name = "context")
-    private String context;
+    @ColumnInfo(name = "password")
+    private String password;
 
-    @ColumnInfo(name = "message")
-    private String message;
-
-    @ColumnInfo(name = "time")
-    private String time;
-
-
-    Notification(int id, String title, String message, String context) {
+    public Notification(int id, String name, String password) {
         this.id = id;
-        this.title = title;
-        this.message = message;
-        this.context = context;
+        this.name = name;
+        this.password = password;
     }
+
 
     @Ignore
-    public Notification(String title, String message, String context, String time) {
-        this.title = title;
-        this.message = message;
-        this.context = context;
-        this.time = time;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
+    public Notification(String name, String password) {
+        this.name = name;
+        this.password = password;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMessage() {
-        return message;
+    public String getPassword() {
+        return password;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

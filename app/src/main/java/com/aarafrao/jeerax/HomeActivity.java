@@ -30,11 +30,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
         ArrayList<ItemModel> rvList = new ArrayList<>();
-        rvList.add(new ItemModel("Facebook", R.drawable.ic_launcher_foreground));
-        rvList.add(new ItemModel("Google", R.drawable.ic_launcher_foreground));
-        rvList.add(new ItemModel("YT", R.drawable.ic_launcher_foreground));
-        rvList.add(new ItemModel("Facebook", R.drawable.ic_launcher_foreground));
-        rvList.add(new ItemModel("Whatsapp", R.drawable.ic_launcher_foreground));
+//        rvList.add(new ItemModel("Facebook", "Password1"));
+//        rvList.add(new ItemModel("Google", "["));
+//        rvList.add(new ItemModel("YT", " R.drawable.ic_launcher_foreground"));
+//        rvList.add(new ItemModel("Facebook", "R.drawable.ic_launcher_foreground"));
+//        rvList.add(new ItemModel("Whatsapp", "R.drawable.ic_launcher_foreground"));
 
         DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
         ArrayList<Notification> notifications =
@@ -45,18 +45,9 @@ public class HomeActivity extends AppCompatActivity {
         rvList = new ArrayList<>();
 
         for (int i = 0; i < notifications.size(); i++) {
-
-            String context = notifications.get(i).getContext();
-            int img;
-//            try {
-//                if (rvList.size() > 0) {
-//                    rvList.add(rvList.size() - i, new NotificationModel(img, notifications.get(i).getTitle(), notifications.get(i).getMessage(), unixToDate(notifications.get(i).getTime())));
-//
-//                }
-//
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
+            rvList.add(rvList.size() - i, new ItemModel(
+                    notifications.get(i).getName(), notifications.get(i).getPassword())
+            );
         }
 
         RvAdapter rvAdapter = new RvAdapter(rvList, getApplicationContext());

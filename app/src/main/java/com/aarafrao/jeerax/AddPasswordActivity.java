@@ -41,6 +41,7 @@ public class AddPasswordActivity extends AppCompatActivity {
         binding2 = BottomSheetLayoutBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
+
         ConstraintLayout bottomSheetLayout = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
         txtMain = findViewById(R.id.txtMain);
@@ -54,6 +55,7 @@ public class AddPasswordActivity extends AppCompatActivity {
         btnUsePassword.setOnClickListener(v -> {
             binding.edPassword.setText(generatedPassword);
         });
+
         seekbar.addOnChangeListener((slider, value, fromUser) -> {
             txtMain.setText(getRandomString((int) value));
         });
@@ -110,27 +112,30 @@ public class AddPasswordActivity extends AppCompatActivity {
 
         binding.btnGenerate.setOnClickListener(v -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
-        binding.btnSave.setOnClickListener(v -> {
-            if (binding.edName.getText().toString().equals("")) {
-                if (binding.edLogin.getText().toString().equals("")) {
-                    if (binding.edPassword.getText().toString().equals("")) {
-                        if (binding.edComment.getText().toString().equals("")) {
+        binding.btnSave.setOnClickListener(v2 -> {
+
+            if (!binding.edName.getText().toString().equals("")) {
+
+                if (!binding.edLogin.getText().toString().equals("")) {
+
+                    if (!binding.edPassword.getText().toString().equals("")) {
+
+                        if (!binding.edComment.getText().toString().equals("")) {
 
                             //SaveInDatabase
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
+
                         } else
-                            binding.edComment.setError("Enter");
-
+                            binding.edCommentLayout.setError("Enter");
                     } else
-                        binding.edPassword.setError("Enter ");
-
+                        binding.edPasswordL.setError("Enter ");
                 } else
-                    binding.edLogin.setError("Enter MAIL");
-
+                    binding.edLoginLayout.setError("Enter MAIL");
             } else {
-                binding.edName.setError("Enter Name");
+                binding.edNameLayout.setError("Enter Name");
             }
         });
+
     }
 
 

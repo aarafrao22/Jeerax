@@ -2,11 +2,11 @@ package com.aarafrao.jeerax;
 
 public class ItemModel {
     private String txtName;
-    private int img;
+    private String password;
 
-    public ItemModel(String txtName, int img) {
+    public ItemModel(String txtName, String password) {
         this.txtName = txtName;
-        this.img = img;
+        this.password = password;
     }
 
     public String getTxtName() {
@@ -17,11 +17,11 @@ public class ItemModel {
         this.txtName = txtName;
     }
 
-    public int getImg() {
-        return img;
+    public String getPassword() {
+        return password;
     }
 
-    public void setImg(int img) {
-        this.img = img;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
