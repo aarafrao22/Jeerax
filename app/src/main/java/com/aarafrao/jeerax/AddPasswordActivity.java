@@ -46,15 +46,13 @@ public class AddPasswordActivity extends AppCompatActivity {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
         txtMain = findViewById(R.id.txtMain);
         seekbar = findViewById(R.id.seekbar);
-        btnUsePassword = findViewById(R.id.btnSave);
+        btnUsePassword = findViewById(R.id.btnUse);
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         String v1 = getRandomString((int) 10);
         txtMain.setText(v1);
 
-        btnUsePassword.setOnClickListener(v -> {
-            binding.edPassword.setText(generatedPassword);
-        });
+        btnUsePassword.setOnClickListener(v -> binding.edPassword.setText(generatedPassword));
 
         seekbar.addOnChangeListener((slider, value, fromUser) -> {
             txtMain.setText(getRandomString((int) value));
