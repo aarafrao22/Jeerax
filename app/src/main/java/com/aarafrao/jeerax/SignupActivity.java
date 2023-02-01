@@ -130,28 +130,25 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             saveData(mail, edName.getText().toString(), pass);
 
             firebaseAuth.createUserWithEmailAndPassword(mail, pass)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
 //                                updateUI(user);
-                                rootNode = FirebaseDatabase.getInstance();
-                                reference = rootNode.getReference("users");
-                                UserHelper userHelper = new UserHelper(edName.getText().toString(), edPassword.getText().toString(), edEmail.getText().toString());
-                                Random rand = new Random();
+                            rootNode = FirebaseDatabase.getInstance();
+                            reference = rootNode.getReference("users");
+//                            UserHelper userHelper = new UserHelper(edName.getText().toString(), edPassword.getText().toString(), edEmail.getText().toString());
+//                            Random rand = new Random();
+//
+//                            int n = rand.nextInt(5000);
+//                            n += 1;
+//                            reference.child(String.valueOf(n) + " " + edName.getText().toString()).setValue(userHelper);
+//                            Toast.makeText(getApplicationContext(), "DataAdded", Toast.LENGTH_SHORT).show();
+//                            sendToMainActivity(edName.getText().toString());
 
-                                int n = rand.nextInt(5000);
-                                n += 1;
-                                reference.child(String.valueOf(n) + " " + edName.getText().toString()).setValue(userHelper);
-                                Toast.makeText(getApplicationContext(), "DataAdded", Toast.LENGTH_SHORT).show();
-                                sendToMainActivity(edName.getText().toString());
-
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
-                            }
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
                         }
                     });
 
