@@ -132,7 +132,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             firebaseAuth.createUserWithEmailAndPassword(mail, pass)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = firebaseAuth.getCurrentUser();
 //                                updateUI(user);
                             rootNode = FirebaseDatabase.getInstance();
@@ -144,7 +143,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 //                            n += 1;
 //                            reference.child(String.valueOf(n) + " " + edName.getText().toString()).setValue(userHelper);
 //                            Toast.makeText(getApplicationContext(), "DataAdded", Toast.LENGTH_SHORT).show();
-//                            sendToMainActivity(edName.getText().toString());
+                            sendToMainActivity(edName.getText().toString());
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -156,7 +155,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void sendToMainActivity(String s) {
-        startActivity(new Intent(this, LoginActivity.class).putExtra("name", s));
+        startActivity(new Intent(this, HomeActivity.class).putExtra("name", s));
         finish();
     }
 

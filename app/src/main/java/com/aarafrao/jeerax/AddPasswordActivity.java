@@ -108,8 +108,8 @@ public class AddPasswordActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                binding.edPassword.setText("");
-                binding.btnGenerate.setVisibility(View.VISIBLE);
+//                binding.edPassword.setText("");
+//                binding.btnGenerate.setVisibility(View.VISIBLE);
 
             }
         });
@@ -118,7 +118,7 @@ public class AddPasswordActivity extends AppCompatActivity {
 
         binding.btnSave.setOnClickListener(v2 -> {
 
-            if (!binding.edName.getText().toString().equals("")) {
+            if (!binding.edEmail.getText().toString().equals("")) {
 
                 if (!binding.edLogin.getText().toString().equals("")) {
 
@@ -130,7 +130,7 @@ public class AddPasswordActivity extends AppCompatActivity {
 
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
                             DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
-                            databaseHelper.notificationDAO().addNotification(new Notification(binding.edName.getText().toString(), binding.edPassword.getText().toString()));
+                            databaseHelper.notificationDAO().addNotification(new Notification(binding.edEmail.getText().toString(), binding.edPassword.getText().toString()));
                             Intent intent = new Intent(AddPasswordActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
