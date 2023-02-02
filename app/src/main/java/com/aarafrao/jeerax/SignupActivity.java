@@ -33,7 +33,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private Button btnSignUp;
 
     FirebaseDatabase rootNode;
-    MaterialCheckBox checkA12, check1no, check1lowercase, check1UpperCase;
+    MaterialCheckBox checkA12, check1no, check1lowercase, check1UpperCase, check1SpecialCharacter;
     DatabaseReference reference;
     FirebaseAuth firebaseAuth;
 
@@ -100,49 +100,79 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         btnSignUp.setOnClickListener(v -> {
 //            checkEmailAndPassword();
-            if (containsAtLeast1UpperCase(edPassword.getText().toString())) {
+            if (isValid(edPassword.getText().toString())) {
                 Toast.makeText(SignupActivity.this, "Password is GOOD", Toast.LENGTH_SHORT).show();
                 check1UpperCase.setChecked(true);
                 checkA12.setChecked(true);
+                check1SpecialCharacter.setChecked(true);
                 check1lowercase.setChecked(true);
                 check1no.setChecked(true);
             } else {
                 Toast.makeText(SignupActivity.this, "Password is Weak", Toast.LENGTH_SHORT).show();
+
+                if (hasNumberRegex(edPassword.getText().toString())) {
+                    check1no.setChecked(true);
+
+                    if (hasLowercase(edPassword.getText().toString())) {
+                        check1lowercase.setChecked(true);
+
+                        if (hasUppercase(edPassword.getText().toString())) {
+                            check1UpperCase.setChecked(true);
+
+                            if (hasSpecialCharacter(edPassword.getText().toString())) {
+                                check1SpecialCharacter.setChecked(true);
+
+                                if (isLongerThan11(edPassword.getText().toString())) {
+                                    checkA12.setChecked(true);
+
+
+                                }
+
+                            }
+
+                        }
+                    }
+                }
             }
 
         });
     }
 
-    public static boolean containsAtLeast1No(final String password) {
-
-        Pattern pattern;
-        Matcher matcher;
-        final String PASSWORD_PATTERN = "(?=.*[0-9])";
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-        matcher = pattern.matcher(password);
-
-        return matcher.matches();
-
+    public static boolean isLongerThan11(String password) {
+        Pattern pattern = Pattern.compile(".{8,}");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
     }
 
-    public static boolean containsAtLeast1UpperCase(final String password) {
+    public static boolean hasSpecialCharacter(String password) {
+        Pattern pattern = Pattern.compile("[!@#$%^&*(),.?\":{}|<>]");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
+    }
+
+    public static boolean hasLowercase(String password) {
+        Pattern pattern = Pattern.compile("[a-z]");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
+    }
+
+    public static boolean hasUppercase(String password) {
+        Pattern pattern = Pattern.compile("[A-Z]");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
+    }
+
+    public static boolean hasNumberRegex(String password) {
+        Pattern pattern = Pattern.compile("\\d");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
+    }
+
+    public static boolean isValid(final String password) {
 
         Pattern pattern;
         Matcher matcher;
         final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&!$*])[a-zA-Z0-9@#$%&!$*]{8,15}$";
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-        matcher = pattern.matcher(password);
-
-        return matcher.matches();
-
-    }
-
-    //if
-    public static boolean containsAtLeast1LowerCase(final String password) {
-
-        Pattern pattern;
-        Matcher matcher;
-        final String PASSWORD_PATTERN = "(?=.*[a-z])";
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);
 
@@ -248,6 +278,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         btnSignUp = findViewById(R.id.btnContinue);
         checkA12 = findViewById(R.id.checkA12);
         check1no = findViewById(R.id.check1no);
+        check1SpecialCharacter = findViewById(R.id.check1SpecialCharacter);
         check1lowercase = findViewById(R.id.check1lowercase);
         check1UpperCase = findViewById(R.id.check1UpperCase);
 
