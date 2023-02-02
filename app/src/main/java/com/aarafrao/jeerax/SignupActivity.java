@@ -1,6 +1,5 @@
 package com.aarafrao.jeerax;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -16,16 +15,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +33,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private Button btnSignUp;
 
     FirebaseDatabase rootNode;
+    MaterialCheckBox checkA12, check1no, check1lowercase, check1UpperCase;
     DatabaseReference reference;
     FirebaseAuth firebaseAuth;
 
@@ -88,7 +88,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                checkInputs();
+//                checkInputs();
+
             }
 
             @Override
@@ -98,8 +99,55 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         btnSignUp.setOnClickListener(v -> {
-            checkEmailAndPassword();
+//            checkEmailAndPassword();
+            if (containsAtLeast1UpperCase(edPassword.getText().toString())) {
+                Toast.makeText(SignupActivity.this, "Password is GOOD", Toast.LENGTH_SHORT).show();
+                check1UpperCase.setChecked(true);
+                checkA12.setChecked(true);
+                check1lowercase.setChecked(true);
+                check1no.setChecked(true);
+            } else {
+                Toast.makeText(SignupActivity.this, "Password is Weak", Toast.LENGTH_SHORT).show();
+            }
+
         });
+    }
+
+    public static boolean containsAtLeast1No(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "(?=.*[0-9])";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
+    }
+
+    public static boolean containsAtLeast1UpperCase(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&!$*])[a-zA-Z0-9@#$%&!$*]{8,15}$";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
+    }
+
+    //if
+    public static boolean containsAtLeast1LowerCase(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "(?=.*[a-z])";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
     }
 
     private void saveData(String email, String name, String pass) {
@@ -136,12 +184,18 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 //                                updateUI(user);
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("users");
-//                            UserHelper userHelper = new UserHelper(edName.getText().toString(), edPassword.getText().toString(), edEmail.getText().toString());
-//                            Random rand = new Random();
-//
-//                            int n = rand.nextInt(5000);
-//                            n += 1;
-//                            reference.child(String.valueOf(n) + " " + edName.getText().toString()).setValue(userHelper);
+
+                            UserHelper userHelper = new UserHelper(
+                                    edName.getText().toString(),
+                                    edPassword.getText().toString(),
+                                    edEmail.getText().toString()
+                            );
+
+                            Random rand = new Random();
+
+                            int n = rand.nextInt(5000);
+                            n += 1;
+                            reference.child(String.valueOf(n) + " " + edName.getText().toString()).setValue(userHelper);
 //                            Toast.makeText(getApplicationContext(), "DataAdded", Toast.LENGTH_SHORT).show();
                             sendToMainActivity(edName.getText().toString());
 
@@ -166,13 +220,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 if (!TextUtils.isEmpty(edPassword.getText()) && edPassword.length() >= 8) {
                     setBtnEnabled();
                 } else {
-                    setBtnDisabled();
+//                    setBtnDisabled();
                 }
             } else {
-                setBtnDisabled();
+//                setBtnDisabled();
             }
         } else {
-            setBtnDisabled();
+//            setBtnDisabled();
         }
     }
 
@@ -192,6 +246,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         edPassword = findViewById(R.id.edMasterPass);
         edName = findViewById(R.id.edReminder);
         btnSignUp = findViewById(R.id.btnContinue);
+        checkA12 = findViewById(R.id.checkA12);
+        check1no = findViewById(R.id.check1no);
+        check1lowercase = findViewById(R.id.check1lowercase);
+        check1UpperCase = findViewById(R.id.check1UpperCase);
+
 
         firebaseAuth = FirebaseAuth.getInstance();
 //        firebaseFirestore = FirebaseFirestore.getInstance();

@@ -111,13 +111,14 @@
         android:textColorHint="#9E9C9C"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/check1UpperCase" />
+        app:layout_constraintTop_toBottomOf="@+id/check1SpecialCharacter" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/checkA12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+
         android:layout_marginTop="22dp"
         android:text="At least 12 Characters"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +138,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="At least 1 number"
+        android:text="At least 1 Lower Case"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/check1no" />
 
@@ -146,9 +147,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="At least 1 number"
+        android:text="At least 1 Upper Case"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/check1lowercase" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/check1SpecialCharacter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="At least 1 Special Character"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check1UpperCase" />
 
     <Button
         android:id="@+id/btnContinue"
@@ -161,6 +171,7 @@
         android:text="Sign Up"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:layout_margin="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edConfMasterPass" />
@@ -172,9 +183,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+
         android:layout_marginBottom="24dp"
         android:text="Already Have an Account? Sign In"
-        android:textColor="@color/white"
+        android:textColor="@color/purple_500"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
