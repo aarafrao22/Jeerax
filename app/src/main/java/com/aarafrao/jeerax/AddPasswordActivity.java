@@ -19,6 +19,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.slider.Slider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Random;
 
@@ -29,13 +31,12 @@ public class AddPasswordActivity extends AppCompatActivity {
     private BottomSheetLayoutBinding binding2;
     private MaterialCheckBox checkDIgits, checkAlpha, checkSymbol;
     private TextView txtMain;
+    private DatabaseReference mDatabase;
     private String generatedPassword = "";
     private Slider seekbar;
     private MaterialButton btnUsePassword;
     private String ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
-    private String ALLOWED_CHARACTERS1 = "0123456789";
-    private String ALLOWED_CHARACTERS2 = "{}[]%^;':,.?/";
-    private String ALLOWED_CHARACTERS3 = "qwertyuiopasdfghjklzxcvbnm";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class AddPasswordActivity extends AppCompatActivity {
         binding2 = BottomSheetLayoutBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         ConstraintLayout bottomSheetLayout = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
@@ -70,49 +72,7 @@ public class AddPasswordActivity extends AppCompatActivity {
         checkAlpha.setChecked(true);
         checkSymbol.setChecked(true);
         binding.imgClose.setOnClickListener(v -> finish());
-//        checkDIgits.setOnCheckedChangeListener((compoundButton, b) -> {
-//            if (b) {
-//                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
-//                ALLOWED_CHARACTERS = ALLOWED_CHARACTERS1;
-//            } else {
-//                ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
-//            }
-//        });
-//        checkAlpha.setOnCheckedChangeListener((compoundButton, b) -> {
-//            if (b) {
-//                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
-//                ALLOWED_CHARACTERS = ALLOWED_CHARACTERS1;
-//            } else {
-//                ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
-//            }
-//        });
-//        checkSymbol.setOnCheckedChangeListener((compoundButton, b) -> {
-//            if (b) {
-//                Toast.makeText(this, "Checked", Toast.LENGTH_SHORT).show();
-//                ALLOWED_CHARACTERS = ALLOWED_CHARACTERS1;
-//            } else {
-//                ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
-//            }
-//        });
 
-        binding.edPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-//                binding.edPassword.setText("");
-//                binding.btnGenerate.setVisibility(View.VISIBLE);
-
-            }
-        });
 
         binding.btnGenerate.setOnClickListener(v -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
@@ -129,6 +89,14 @@ public class AddPasswordActivity extends AppCompatActivity {
                             //SaveInDatabase On Firebase and ROOM
 
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
+                            String uname = binding.edLogin.getText().toString();
+                            String[] u_name = uname.split("@");
+
+                            PasswordModel p = new PasswordModel(binding.edLogin.getText().toString(), binding.edPassword.getText().toString(), binding.edEmail.getText().toString());
+                            mDatabase.child("passwords")
+                                    .child(u_name[0])
+                                    .setValue(p);
+
                             DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
                             databaseHelper.notificationDAO().addNotification(new Notification(binding.edEmail.getText().toString(), binding.edPassword.getText().toString()));
                             Intent intent = new Intent(AddPasswordActivity.this, HomeActivity.class);

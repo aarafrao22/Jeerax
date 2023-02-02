@@ -99,7 +99,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         btnSignUp.setOnClickListener(v -> {
-//            checkEmailAndPassword();
             if (isValid(edPassword.getText().toString())) {
                 Toast.makeText(SignupActivity.this, "Password is GOOD", Toast.LENGTH_SHORT).show();
                 check1UpperCase.setChecked(true);
@@ -107,6 +106,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 check1SpecialCharacter.setChecked(true);
                 check1lowercase.setChecked(true);
                 check1no.setChecked(true);
+                checkEmailAndPassword();
             } else {
                 Toast.makeText(SignupActivity.this, "Password is Weak", Toast.LENGTH_SHORT).show();
 
@@ -221,12 +221,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                     edEmail.getText().toString()
                             );
 
-                            Random rand = new Random();
+                            String uname = edEmail.getText().toString();
+                            String[] u_name = uname.split("@");
 
-                            int n = rand.nextInt(5000);
-                            n += 1;
-                            reference.child(String.valueOf(n) + " " + edName.getText().toString()).setValue(userHelper);
-//                            Toast.makeText(getApplicationContext(), "DataAdded", Toast.LENGTH_SHORT).show();
+                            reference.child(u_name[0]).setValue(userHelper);
                             sendToMainActivity(edName.getText().toString());
 
                         } else {
@@ -239,7 +237,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void sendToMainActivity(String s) {
-        startActivity(new Intent(this, HomeActivity.class).putExtra("name", s));
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
