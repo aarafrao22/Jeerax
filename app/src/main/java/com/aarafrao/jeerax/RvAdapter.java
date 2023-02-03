@@ -35,7 +35,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.txt.setText(itemModelArrayList.get(position).getTxtName());
+        holder.txt.setText(itemModelArrayList.get(position).getApp());
 
     }
 

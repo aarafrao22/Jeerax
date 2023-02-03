@@ -1,20 +1,20 @@
 package com.aarafrao.jeerax;
 
 public class ItemModel {
-    private String txtName;
+    private String app;
     private String password;
 
-    public ItemModel(String txtName, String password) {
-        this.txtName = txtName;
+    public ItemModel(String app, String password) {
+        this.app = app;
         this.password = password;
     }
 
-    public String getTxtName() {
-        return txtName;
+    public String getApp() {
+        return app;
     }
 
-    public void setTxtName(String txtName) {
-        this.txtName = txtName;
+    public void setApp(String app) {
+        this.app = app;
     }
 
     public String getPassword() {

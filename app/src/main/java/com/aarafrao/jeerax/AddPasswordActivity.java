@@ -103,10 +103,13 @@ public class AddPasswordActivity extends AppCompatActivity {
                                     .child(binding.edName.getText().toString())
                                     .setValue(p);
 
-                            DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
-                            databaseHelper.notificationDAO().addNotification(new
-                                    Notification(binding.edEmail.getText().toString(),
-                                    binding.edPassword.getText().toString()));
+//                            DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
+//                            databaseHelper.notificationDAO().addNotification(new
+//                                    Notification(
+//                                            binding.edName.getText().toString(),
+//                                            binding.edPassword.getText().toString()
+//                                    )
+//                            );
                             Intent intent = new Intent(AddPasswordActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();

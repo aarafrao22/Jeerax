@@ -22,6 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.signal.argon2.Argon2;
+import org.signal.argon2.Argon2Exception;
+import org.signal.argon2.MemoryCost;
+import org.signal.argon2.Type;
+import org.signal.argon2.Version;
+
+import java.security.SecureRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +42,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     MaterialCheckBox checkA12, check1no, check1lowercase, check1UpperCase, check1SpecialCharacter;
     DatabaseReference reference;
     FirebaseAuth firebaseAuth;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_signup);
 
         initViews();
+
+        editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
 
         clickListeners();
 
@@ -99,13 +109,17 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         btnSignUp.setOnClickListener(v -> {
             if (isValid(edPassword.getText().toString())) {
-                Toast.makeText(SignupActivity.this, "Password is GOOD", Toast.LENGTH_SHORT).show();
                 check1UpperCase.setChecked(true);
                 checkA12.setChecked(true);
                 check1SpecialCharacter.setChecked(true);
                 check1lowercase.setChecked(true);
                 check1no.setChecked(true);
                 checkEmailAndPassword();
+                editor.putString("main", edPassword.getText().toString());
+                editor.apply();
+
+                Toast.makeText(SignupActivity.this, "Password Saved", Toast.LENGTH_SHORT).show();
+
             } else {
                 Toast.makeText(SignupActivity.this, "Password is Weak", Toast.LENGTH_SHORT).show();
 
@@ -136,6 +150,37 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         });
     }
+
+    public static byte[] generateSalt() {
+        byte[] salt = new byte[16];
+        new SecureRandom().nextBytes(salt);
+        return salt;
+    }
+
+    private String encryp(String toString) {
+        Argon2 argon2 = new Argon2.Builder(Version.V13)
+                .type(Type.Argon2id)
+                .memoryCost(MemoryCost.MiB(32))
+                .parallelism(1)
+                .iterations(3)
+                .build();
+
+        byte[] bytes = toString.getBytes();
+
+        Argon2.Result result = null;
+        try {
+            result = argon2.hash(bytes, generateSalt());
+        } catch (Argon2Exception e) {
+            throw new RuntimeException(e);
+        }
+        String hashHex = result.getHashHex();
+        String encoded = result.getEncoded();
+        byte[] hash = result.getHash();
+
+        return hashHex;
+        //uploadOnFIrebase
+    }
+
 
     public static boolean isLongerThan11(String password) {
         Pattern pattern = Pattern.compile(".{8,}");
@@ -213,11 +258,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 //                                updateUI(user);
                             rootNode = FirebaseDatabase.getInstance();
                             reference = rootNode.getReference("users");
+                            String hashed = encryp(edPassword.getText().toString());
 
                             UserHelper userHelper = new UserHelper(
                                     edName.getText().toString(),
                                     edPassword.getText().toString(),
-                                    edEmail.getText().toString()
+                                    edEmail.getText().toString(), hashed
                             );
 
                             String uname = edEmail.getText().toString();
