@@ -108,11 +108,14 @@ public class AddPasswordActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
+                            long unixTime = System.currentTimeMillis() / 1000L;
+
                             PasswordModel p = new PasswordModel(
                                     binding.edEmail.getText().toString(),
                                     binding.edPassword.getText().toString(),
                                     binding.edName.getText().toString(),
-                                    hashed
+                                    hashed, String.valueOf(unixTime)
+
                             );
 
                             mDatabase.child("passwords")
