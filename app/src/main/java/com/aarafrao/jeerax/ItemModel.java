@@ -4,6 +4,9 @@ public class ItemModel {
     private String app;
     private String password;
 
+    public ItemModel() {
+    }
+
     public ItemModel(String app, String password) {
         this.app = app;
         this.password = password;

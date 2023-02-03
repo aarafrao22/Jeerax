@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity implements OnItemClickListener {
 
     ActivityHomeBinding binding;
+    RvAdapter rvAdapter;
     ArrayList<ItemModel> rvList = new ArrayList<>();
     private DatabaseReference mDatabase;
     @Override
@@ -41,15 +42,10 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 //                (ArrayList<Notification>)
 //                        databaseHelper.notificationDAO().getAllNotifications();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child("aarafrao22");
 
         rvList = new ArrayList<>();
 
-//        for (int i = 0; i < notifications.size(); i++) {
-//            rvList.add(rvList.size() - i, new ItemModel(
-//                    notifications.get(i).getName(), notifications.get(i).getPassword())
-//            );
-//        }
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -57,7 +53,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
                     ItemModel pd = dataSnapshot.getValue(ItemModel.class);
                     rvList.add(pd);
                 }
-//                binding.recyclerView.notifyDataSetChanged();
+                rvAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -67,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         });
         //fetch list from Firebase
 
-        RvAdapter rvAdapter = new RvAdapter(rvList, this, getApplicationContext());
+        rvAdapter = new RvAdapter(rvList, this, getApplicationContext());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(rvAdapter);
