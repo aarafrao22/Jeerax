@@ -157,7 +157,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         return salt;
     }
 
-    private String encryp(String toString) {
+    public static String encryp(String toString) {
         Argon2 argon2 = new Argon2.Builder(Version.V13)
                 .type(Type.Argon2id)
                 .memoryCost(MemoryCost.MiB(32))

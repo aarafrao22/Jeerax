@@ -1,18 +1,15 @@
 package com.aarafrao.jeerax;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aarafrao.jeerax.Database.DatabaseHelper;
-import com.aarafrao.jeerax.Database.Notification;
 import com.aarafrao.jeerax.databinding.ActivityAddPasswordBinding;
 import com.aarafrao.jeerax.databinding.BottomSheetLayoutBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -22,7 +19,14 @@ import com.google.android.material.slider.Slider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Random;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class AddPasswordActivity extends AppCompatActivity {
 
@@ -38,6 +42,7 @@ public class AddPasswordActivity extends AppCompatActivity {
     private String ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +96,23 @@ public class AddPasswordActivity extends AppCompatActivity {
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
                             String uname = binding.edEmail.getText().toString();
                             String[] u_name = uname.split("@");
-
+                            String secKey = null;
+                            try {
+                                secKey = generateSecretKey(binding.edPassword.getText().toString());
+                            } catch (NoSuchAlgorithmException e) {
+                                throw new RuntimeException(e);
+                            }
+                            String hashed = null;
+                            try {
+                                hashed = encrypt(binding.edPassword.getText().toString(), secKey);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                             PasswordModel p = new PasswordModel(
                                     binding.edEmail.getText().toString(),
                                     binding.edPassword.getText().toString(),
-                                    binding.edName.getText().toString()
+                                    binding.edName.getText().toString(),
+                                    hashed
                             );
 
                             mDatabase.child("passwords")
@@ -125,6 +142,25 @@ public class AddPasswordActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private static final String KEY_ALGORITHM = "AES";
+    private static final String CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String generateSecretKey(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hash);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String encrypt(String text, String secretKey) throws Exception {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), KEY_ALGORITHM);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(encrypted);
     }
 
 

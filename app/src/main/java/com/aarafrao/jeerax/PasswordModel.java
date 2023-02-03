@@ -1,12 +1,22 @@
 package com.aarafrao.jeerax;
 
 public class PasswordModel {
-    String email, password, app;
+    String email, password, app, hashed;
 
-    public PasswordModel(String email, String password, String app) {
+
+    public PasswordModel(String email, String password, String app, String hashed) {
         this.email = email;
         this.password = password;
         this.app = app;
+        this.hashed = hashed;
+    }
+
+    public String getHashed() {
+        return hashed;
+    }
+
+    public void setHashed(String hashed) {
+        this.hashed = hashed;
     }
 
     public String getEmail() {
