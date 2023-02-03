@@ -80,7 +80,7 @@ public class AddPasswordActivity extends AppCompatActivity {
 
             if (!binding.edEmail.getText().toString().equals("")) {
 
-                if (!binding.edLogin.getText().toString().equals("")) {
+                if (!binding.edName.getText().toString().equals("")) {
 
                     if (!binding.edPassword.getText().toString().equals("")) {
 
@@ -89,16 +89,24 @@ public class AddPasswordActivity extends AppCompatActivity {
                             //SaveInDatabase On Firebase and ROOM
 
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
-                            String uname = binding.edLogin.getText().toString();
+                            String uname = binding.edEmail.getText().toString();
                             String[] u_name = uname.split("@");
 
-                            PasswordModel p = new PasswordModel(binding.edLogin.getText().toString(), binding.edPassword.getText().toString(), binding.edEmail.getText().toString());
+                            PasswordModel p = new PasswordModel(
+                                    binding.edEmail.getText().toString(),
+                                    binding.edPassword.getText().toString(),
+                                    binding.edName.getText().toString()
+                            );
+
                             mDatabase.child("passwords")
                                     .child(u_name[0])
+                                    .child(binding.edName.getText().toString())
                                     .setValue(p);
 
                             DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
-                            databaseHelper.notificationDAO().addNotification(new Notification(binding.edEmail.getText().toString(), binding.edPassword.getText().toString()));
+                            databaseHelper.notificationDAO().addNotification(new
+                                    Notification(binding.edEmail.getText().toString(),
+                                    binding.edPassword.getText().toString()));
                             Intent intent = new Intent(AddPasswordActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();

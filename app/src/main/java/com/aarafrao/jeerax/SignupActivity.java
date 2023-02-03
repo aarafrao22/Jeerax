@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -270,7 +269,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initViews() {
         tvAlreadyHave = findViewById(R.id.sign_up_already_have);
-        edEmail = findViewById(R.id.edEmail);
+        edEmail = findViewById(R.id.edName);
         edPassword = findViewById(R.id.edMasterPass);
         edName = findViewById(R.id.edReminder);
         btnSignUp = findViewById(R.id.btnContinue);

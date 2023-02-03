@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -66,8 +69,15 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         builder1.setCancelable(true);
 
         builder1.setPositiveButton(
-                "OK",
-                (dialog, id) -> dialog.cancel());
+                "COPY",
+                (dialog, id) -> {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(title, message);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getApplicationContext(), "Password Copied!", Toast.LENGTH_SHORT).show();
+                });
+
+        builder1.setNegativeButton("OK", (dialogInterface, i) -> dialogInterface.cancel());
 
 
         AlertDialog alert11 = builder1.create();
