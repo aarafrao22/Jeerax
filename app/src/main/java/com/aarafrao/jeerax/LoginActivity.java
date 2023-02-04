@@ -80,8 +80,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void sendToMainActivity(String s) {
-        startActivity(new Intent(this, HomeActivity.class).putExtra("name", s));
+    private void sendToMainActivity() {
+        startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
 
@@ -95,14 +95,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 firebaseAuth.signInWithEmailAndPassword(edEmail.getText().toString(),
                                 edPassword.getText().toString())
                         .addOnCompleteListener(task -> {
-                            FirebaseUser user = task.getResult().getUser();
                             if (task.isSuccessful()) {
                                 editor.putString("main", edPassword.getText().toString());
                                 editor.apply();
-                                sendToMainActivity(user.getDisplayName());
+                                sendToMainActivity();
                             } else {
-                                Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_LONG);
-
+                                Toast.makeText(LoginActivity.this, "Incorrect Email or Password", Toast.LENGTH_LONG).show();
                             }
                         });
             } else {

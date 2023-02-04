@@ -14,8 +14,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="42dp"
         android:text="Use any of these services"
-        android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textColor="@color/purple_700"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.86" />
@@ -24,9 +25,8 @@
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="Save your account  names and passwords to keep them save"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintWidth_percent="0.86" />

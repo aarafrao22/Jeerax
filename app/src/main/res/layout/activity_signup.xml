@@ -4,21 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_bg"
-    android:backgroundTint="#f0f0f0"
+    android:background="#f0f0f0"
     tools:context=".SignupActivity">
-
-
-    <ImageButton
-        android:id="@+id/sign_up_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:padding="16dp"
-        android:src="@drawable/ic_launcher_background"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtSignIn"
@@ -30,7 +17,7 @@
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="Sign Up"
-        android:textColor="@color/black"
+        android:textColor="@color/purple_700"
         android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
