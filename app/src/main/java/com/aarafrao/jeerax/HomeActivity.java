@@ -10,10 +10,14 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.aarafrao.jeerax.databinding.ActivityHomeBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,22 +31,42 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     ActivityHomeBinding binding;
     RvAdapter rvAdapter;
     ArrayList<ItemModel> rvList = new ArrayList<>();
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase, mDatabas2;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
 
-        binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
 
 //        DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
 //        ArrayList<Notification> notifications =
 //                (ArrayList<Notification>)
 //                        databaseHelper.notificationDAO().getAllNotifications();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child("aarafrao22");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child(Constants.ID);
+        mDatabas2 = FirebaseDatabase.getInstance().getReference().child("users").child(Constants.ID);
+        binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
+        mDatabas2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
+
+                    editor.putString("main", pd.getPassword());
+                    editor.apply();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         rvList = new ArrayList<>();
 

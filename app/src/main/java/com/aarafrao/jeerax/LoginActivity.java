@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button btnSignIn;
     private FirebaseAuth firebaseAuth;
     private TextView forgotPassword;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,17 +93,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 disable();
 
                 firebaseAuth.signInWithEmailAndPassword(edEmail.getText().toString(), edPassword.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                FirebaseUser user = task.getResult().getUser();
-                                if (task.isSuccessful()) {
-                                    sendToMainActivity(user.getDisplayName());
-                                } else {
-                                    disable();
-                                    Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_LONG);
+                        .addOnCompleteListener(task -> {
+                            FirebaseUser user = task.getResult().getUser();
+                            if (task.isSuccessful()) {
 
-                                }
+                                sendToMainActivity(user.getDisplayName());
+                            } else {
+                                Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_LONG);
+
                             }
                         });
             } else {
@@ -141,6 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edEmail = findViewById(R.id.sign_in_email);
         edPassword = findViewById(R.id.sign_in_password);
         btnSignIn = findViewById(R.id.btn_sign_in);
+        editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
 
         forgotPassword = findViewById(R.id.sign_in_forgot);
 

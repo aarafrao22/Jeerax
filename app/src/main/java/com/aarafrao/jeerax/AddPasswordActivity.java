@@ -115,7 +115,7 @@ public class AddPasswordActivity extends AppCompatActivity {
                             );
 
                             mDatabase.child("passwords")
-                                    .child(u_name[0])
+                                    .child(Constants.ID)
                                     .child(binding.edName.getText().toString())
                                     .setValue(p);
 

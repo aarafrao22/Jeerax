@@ -52,7 +52,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         initViews();
 
         editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
-
         clickListeners();
 
         edEmail.addTextChangedListener(new TextWatcher() {
@@ -266,10 +265,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                     edEmail.getText().toString(), hashed
                             );
 
-                            String uname = edEmail.getText().toString();
-                            String[] u_name = uname.split("@");
-
-                            reference.child(u_name[0]).setValue(userHelper);
+                            reference.child(Constants.ID).setValue(userHelper);
                             sendToMainActivity(edName.getText().toString());
 
                         } else {
