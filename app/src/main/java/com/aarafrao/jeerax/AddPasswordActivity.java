@@ -96,16 +96,11 @@ public class AddPasswordActivity extends AppCompatActivity {
                             Toast.makeText(this, "Password Saved", Toast.LENGTH_SHORT).show();
                             String uname = binding.edEmail.getText().toString();
                             String[] u_name = uname.split("@");
-                            String secKey = null;
-                            try {
-                                secKey = generateSecretKey(binding.edPassword.getText().toString());
-                            } catch (NoSuchAlgorithmException e) {
-                                throw new RuntimeException(e);
-                            }
+
                             String hashed = null;
                             try {
-//                                hashed = encrypt(binding.edPassword.getText().toString(), secKey);
-                                hashed = "encrypt";
+                                hashed = AESEncryption.encrypt(binding.edPassword.getText().toString());
+//                                hashed = "encrypt";
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
