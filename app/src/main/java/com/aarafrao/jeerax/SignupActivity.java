@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aarafrao.jeerax.databinding.ActivitySignupBinding;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,12 +44,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     DatabaseReference reference;
     FirebaseAuth firebaseAuth;
     SharedPreferences.Editor editor;
+    private ActivitySignupBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
-
+        binding = ActivitySignupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         initViews();
 
         editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
@@ -107,6 +109,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         btnSignUp.setOnClickListener(v -> {
+
             if (isValid(edPassword.getText().toString())) {
                 check1UpperCase.setChecked(true);
                 checkA12.setChecked(true);
@@ -136,7 +139,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
                                 if (isLongerThan11(edPassword.getText().toString())) {
                                     checkA12.setChecked(true);
-
 
                                 }
 
