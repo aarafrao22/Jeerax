@@ -10,11 +10,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import com.aarafrao.jeerax.databinding.ActivityAskBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class AskActivity extends AppCompatActivity {
 
     ActivityAskBinding binding;
+
     String mainPass;
 
     @Override
@@ -26,6 +28,20 @@ public class AskActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE);
         mainPass = prefs.getString("main", "No name defined");
+        binding.floatingActionButton.setOnClickListener(v -> {
+            if (!mainPass.equals("No name defined")) {
+
+                if (mainPass.equals(binding.edPasswordMain.getText().toString()))
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+            } else {
+                startActivity(
+                        new Intent(getApplicationContext(),
+                                LoginActivity.class)
+                );
+
+            }
+        });
 
         binding.edPasswordMain.addTextChangedListener(new TextWatcher() {
             @Override
@@ -40,18 +56,7 @@ public class AskActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                new Handler().postDelayed(() -> {
 
-                    if (!mainPass.equals("No name defined")) {
-                        if (mainPass.equals(binding.edPasswordMain.getText().toString())) {
-                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                        }
-                    } else {
-                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
-                    }
-
-                }, 3000);
 
             }
         });

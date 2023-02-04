@@ -104,7 +104,8 @@ public class AddPasswordActivity extends AppCompatActivity {
                             }
                             String hashed = null;
                             try {
-                                hashed = encrypt(binding.edPassword.getText().toString(), secKey);
+//                                hashed = encrypt(binding.edPassword.getText().toString(), secKey);
+                                hashed = "encrypt";
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
