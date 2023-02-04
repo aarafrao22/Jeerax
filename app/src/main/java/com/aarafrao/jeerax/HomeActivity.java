@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     ActivityHomeBinding binding;
     RvAdapter rvAdapter;
     ArrayList<ItemModel> rvList = new ArrayList<>();
-    private DatabaseReference mDatabase, mDatabas2;
+    private DatabaseReference mDatabase;
     SharedPreferences.Editor editor;
 
     @Override
@@ -49,25 +49,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 //                        databaseHelper.notificationDAO().getAllNotifications();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child(Constants.ID);
-        mDatabas2 = FirebaseDatabase.getInstance().getReference().child("users").child(Constants.ID);
         binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
-        mDatabas2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
-
-                    editor.putString("main", pd.getPassword());
-                    editor.apply();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
         rvList = new ArrayList<>();
 
         mDatabase.addValueEventListener(new ValueEventListener() {

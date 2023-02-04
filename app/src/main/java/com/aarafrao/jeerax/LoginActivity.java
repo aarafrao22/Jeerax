@@ -92,11 +92,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 disable();
 
-                firebaseAuth.signInWithEmailAndPassword(edEmail.getText().toString(), edPassword.getText().toString())
+                firebaseAuth.signInWithEmailAndPassword(edEmail.getText().toString(),
+                                edPassword.getText().toString())
                         .addOnCompleteListener(task -> {
                             FirebaseUser user = task.getResult().getUser();
                             if (task.isSuccessful()) {
-
+                                editor.putString("main", edPassword.getText().toString());
+                                editor.apply();
                                 sendToMainActivity(user.getDisplayName());
                             } else {
                                 Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_LONG);
@@ -144,9 +146,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         forgotPassword = findViewById(R.id.sign_in_forgot);
 
-//        forgotPassword.setOnClickListener(v -> {
-//            startActivity(new Intent(this, ForgotPasswordActivity.class));
-//        });
+        forgotPassword.setOnClickListener(v -> {
+            startActivity(new Intent(this, ForgotPasswordActivity.class));
+        });
 
         firebaseAuth = FirebaseAuth.getInstance();
     }
