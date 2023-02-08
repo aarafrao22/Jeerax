@@ -64,10 +64,9 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
 
         setContentView(binding.getRoot());
         paths = new ArrayList<>();
-        paths.add("B");
-        paths.add("C");
-        paths.add("D");
-        paths.add("add");
+        paths.add("App");
+        paths.add("Website");
+        paths.add("+Add");
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -201,7 +200,7 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if (paths.get(i).equals("add")) {
+        if (paths.get(i).equals("+Add")) {
             showAddCategoryDialogue();
         }
     }

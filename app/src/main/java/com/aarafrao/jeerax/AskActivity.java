@@ -38,28 +38,14 @@ public class AskActivity extends AppCompatActivity {
 
                 if (mainPass.equals(binding.edPasswordMain.getText().toString()))
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                else
+                    Toast.makeText(this, "Incorrect Password!", Toast.LENGTH_SHORT).show();
 
             } else {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
             }
         });
 
-        binding.edPasswordMain.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
 
 
         binding.imgFingerprint.setOnClickListener(v -> authenticate());
