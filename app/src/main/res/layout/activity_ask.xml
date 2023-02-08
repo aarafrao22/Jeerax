@@ -56,4 +56,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/arrow_down_s_line__1_" />
 
+    <ImageView
+        android:id="@+id/imgFingerprint"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_margin="64dp"
+        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+        app:layout_constraintDimensionRatio="1,1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edLoginLayout"
+        app:srcCompat="@drawable/fingerprint_line" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/imgFingerprint"
+        app:layout_constraintEnd_toEndOf="@+id/edLoginLayout"
+        app:layout_constraintStart_toStartOf="@+id/edLoginLayout"
+        app:layout_constraintTop_toBottomOf="@+id/edLoginLayout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
