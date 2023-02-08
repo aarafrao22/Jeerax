@@ -83,7 +83,6 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
                         }
                     });
                 }
-
             }
 
             @Override
@@ -128,10 +127,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         List<PasswordModel> valueList;
 
         for (int i = 0; i < keyList.size(); i++) {
-            valueList = new ArrayList<>();
-            for (int k = 0; k < rvList.size(); k++) {
-                valueList.add(rvList.get(k));
-            }
+            valueList = new ArrayList<>(rvList);
             a.put(keyList.get(i), valueList);
 
         }
