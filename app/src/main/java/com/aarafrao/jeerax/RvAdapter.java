@@ -15,12 +15,12 @@ import com.aarafrao.jeerax.databinding.MainRvItemBinding;
 import java.util.ArrayList;
 
 public class RvAdapter extends RecyclerView.Adapter<RvAdapter.VH> {
-    private ArrayList<ItemModel> itemModelArrayList;
+    private ArrayList<PasswordModel> itemModelArrayList;
     private final OnItemClickListener listener;
     private Context context;
 
 
-    public RvAdapter(ArrayList<ItemModel> itemModelArrayList, OnItemClickListener listener, Context context) {
+    public RvAdapter(ArrayList<PasswordModel> itemModelArrayList, OnItemClickListener listener, Context context) {
         this.itemModelArrayList = itemModelArrayList;
         this.listener = listener;
         this.context = context;

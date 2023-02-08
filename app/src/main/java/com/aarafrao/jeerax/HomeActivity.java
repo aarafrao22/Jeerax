@@ -30,7 +30,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
     ActivityHomeBinding binding;
     RvAdapter rvAdapter;
-    ArrayList<ItemModel> rvList = new ArrayList<>();
+    ArrayList<PasswordModel> rvList = new ArrayList<>();
     private DatabaseReference mDatabase;
     SharedPreferences.Editor editor;
 
@@ -56,9 +56,12 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    ItemModel pd = dataSnapshot.getValue(ItemModel.class);
+
+                    PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
                     rvList.add(pd);
+
                 }
+
                 rvAdapter.notifyDataSetChanged();
             }
 
@@ -78,7 +81,13 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void onItemClick(int pos) {
-        showAlertDialogue2(rvList.get(pos).getApp(), "The Password is:" + rvList.get(pos).getPassword(), R.drawable.lock_fill);
+        showAlertDialogue2(
+                rvList.get(pos).getApp(),
+                "Email:   " + rvList.get(pos).getEmail() +
+                        "\nPassword:   " + rvList.get(pos).getPassword() +
+                        "\nHashed:   " + rvList.get(pos).getHashed(),
+
+                R.drawable.lock_fill);
     }
 
     private void showAlertDialogue2(String title, String message, int icon) {
