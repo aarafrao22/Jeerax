@@ -36,6 +36,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     ActivityHomeBinding binding;
     RvAdapter rvAdapter;
     ArrayList<PasswordModel> rvList = new ArrayList<>();
+    ArrayList<String> mainList = new ArrayList<>();
     private DatabaseReference mDatabase;
 
     SharedPreferences.Editor editor;
@@ -53,7 +54,6 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         setContentView(binding.getRoot());
         editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
 
-        expandableListWorking();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child(Constants.ID);
         binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
@@ -63,13 +63,11 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                    PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
-                    rvList.add(pd);
+                    mainList.add(dataSnapshot.getKey());
 
                 }
+                expandableListWorking();
 
-                rvAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -77,6 +75,25 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
             }
         });
+
+//        mDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//
+//                    PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
+//                    rvList.add(pd);
+//
+//                }
+//
+//                rvAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
         //fetch list from Firebase
 
         rvAdapter = new RvAdapter(rvList, this, getApplicationContext());
@@ -92,7 +109,10 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         HashMap<String, List<String>> a = new HashMap<>();
         List<String> a1 = new ArrayList<>();
         a1.add("FB");
-        a.put("WebApp", a1);
+
+        for (int i = 0; i < mainList.size(); i++) {
+            a.put(mainList.get(i), a1);
+        }
         expandableDetailList = a;
         expandableTitleList = new ArrayList<String>(expandableDetailList.keySet());
         expandableListAdapter = new CustomizedExpandableListAdapter(this, expandableTitleList, expandableDetailList);
@@ -114,9 +134,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
             }
         });
 
-        // This method is called when the child in any group is clicked
-        // via a toast method, it is shown to display the selected child item as a sample
-        // we may need to add further steps according to the requirements
+
         expandableListViewExample.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
