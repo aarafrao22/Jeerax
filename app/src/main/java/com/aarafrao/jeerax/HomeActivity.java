@@ -13,6 +13,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.aarafrao.jeerax.databinding.ActivityHomeBinding;
@@ -25,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements OnItemClickListener {
 
@@ -32,7 +37,13 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     RvAdapter rvAdapter;
     ArrayList<PasswordModel> rvList = new ArrayList<>();
     private DatabaseReference mDatabase;
+
     SharedPreferences.Editor editor;
+    ExpandableListView expandableListViewExample;
+    ExpandableListAdapter expandableListAdapter;
+    List<String> expandableTitleList;
+    HashMap<String, List<String>> expandableDetailList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +53,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         setContentView(binding.getRoot());
         editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
 
-//        DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
-//        ArrayList<Notification> notifications =
-//                (ArrayList<Notification>)
-//                        databaseHelper.notificationDAO().getAllNotifications();
+        expandableListWorking();
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child(Constants.ID);
         binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
@@ -76,6 +84,52 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(rvAdapter);
 
+    }
+
+    private void expandableListWorking() {
+        expandableListViewExample = findViewById(R.id.expandableListViewSample);
+
+        HashMap<String, List<String>> a = new HashMap<>();
+        List<String> a1 = new ArrayList<>();
+        a1.add("FB");
+        a.put("WebApp", a1);
+        expandableDetailList = a;
+        expandableTitleList = new ArrayList<String>(expandableDetailList.keySet());
+        expandableListAdapter = new CustomizedExpandableListAdapter(this, expandableTitleList, expandableDetailList);
+        expandableListViewExample.setAdapter(expandableListAdapter);
+
+        // This method is called when the group is expanded
+        expandableListViewExample.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " List Expanded.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // This method is called when the group is collapsed
+        expandableListViewExample.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " List Collapsed.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // This method is called when the child in any group is clicked
+        // via a toast method, it is shown to display the selected child item as a sample
+        // we may need to add further steps according to the requirements
+        expandableListViewExample.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition)
+                        + " -> "
+                        + expandableDetailList.get(
+                        expandableTitleList.get(groupPosition)).get(
+                        childPosition), Toast.LENGTH_SHORT
+                ).show();
+                return false;
+            }
+        });
     }
 
     @Override
