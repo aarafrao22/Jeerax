@@ -147,13 +147,6 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
                                     .child(binding.edName.getText().toString())
                                     .setValue(p);
 
-//                            DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
-//                            databaseHelper.notificationDAO().addNotification(new
-//                                    Notification(
-//                                            binding.edName.getText().toString(),
-//                                            binding.edPassword.getText().toString()
-//                                    )
-//                            );
                             Intent intent = new Intent(AddPasswordActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
@@ -170,26 +163,6 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
         });
 
     }
-
-    private static final String KEY_ALGORITHM = "AES";
-    private static final String CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static String generateSecretKey(String password) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(hash);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static String encrypt(String text, String secretKey) throws Exception {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), KEY_ALGORITHM);
-        Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-        byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(encrypted);
-    }
-
 
     private String getRandomString(final int sizeOfRandomString) {
         final Random random = new Random();
