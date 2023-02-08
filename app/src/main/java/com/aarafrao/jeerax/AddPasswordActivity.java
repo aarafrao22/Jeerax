@@ -1,12 +1,23 @@
 package com.aarafrao.jeerax;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,15 +33,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-public class AddPasswordActivity extends AppCompatActivity {
+public class AddPasswordActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ActivityAddPasswordBinding binding;
+    private ArrayList<String> paths;
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetLayoutBinding binding2;
     private MaterialCheckBox checkDIgits, checkAlpha, checkSymbol;
@@ -50,7 +63,21 @@ public class AddPasswordActivity extends AppCompatActivity {
         binding2 = BottomSheetLayoutBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
+        paths = new ArrayList<>();
+        paths.add("B");
+        paths.add("C");
+        paths.add("D");
+        paths.add("add");
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(AddPasswordActivity.this,
+                android.R.layout.simple_spinner_item, paths);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinner.setAdapter(adapter);
+        binding.spinner.setOnItemSelectedListener(this);
+
 
         ConstraintLayout bottomSheetLayout = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
@@ -170,5 +197,45 @@ public class AddPasswordActivity extends AppCompatActivity {
             sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
         generatedPassword = sb.toString();
         return sb.toString();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if (paths.get(i).equals("add")) {
+            showAddCategoryDialogue();
+        }
+    }
+
+    private void showAddCategoryDialogue() {
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(AddPasswordActivity.this);
+        builder1.setTitle("Add Category");
+        final EditText input = new EditText(AddPasswordActivity.this);
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder1.setView(input);
+        builder1.setPositiveButton("OK", (dialog, which) -> {
+            String text = input.getText().toString();
+            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+
+            //make list on firebase
+            dialog.dismiss();
+            // Handle the OK button press
+        });
+
+        builder1.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+
+            // Handle the Cancel button press
+        });
+        builder1.show();
+
+
+    }
+
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

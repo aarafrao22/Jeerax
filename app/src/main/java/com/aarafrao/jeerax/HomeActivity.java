@@ -42,7 +42,6 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         setContentView(binding.getRoot());
         editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
 
-
 //        DatabaseHelper databaseHelper = DatabaseHelper.getDB(getApplicationContext());
 //        ArrayList<Notification> notifications =
 //                (ArrayList<Notification>)

@@ -27,7 +27,6 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE);
         mainPass = prefs.getString("main", "No name defined");
 
-
         new Handler().postDelayed(() -> {
 
             if (!mainPass.equals("No name defined"))
