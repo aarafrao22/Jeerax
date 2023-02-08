@@ -12,15 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.aarafrao.jeerax.databinding.ActivityHomeBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,14 +33,14 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     ActivityHomeBinding binding;
     RvAdapter rvAdapter;
     ArrayList<PasswordModel> rvList = new ArrayList<>();
-    ArrayList<String> mainList = new ArrayList<>();
+    ArrayList<String> keyList = new ArrayList<>();
     private DatabaseReference mDatabase;
 
     SharedPreferences.Editor editor;
     ExpandableListView expandableListViewExample;
     ExpandableListAdapter expandableListAdapter;
     List<String> expandableTitleList;
-    HashMap<String, List<String>> expandableDetailList;
+    HashMap<String, List<PasswordModel>> expandableDetailList;
 
 
     @Override
@@ -64,11 +61,11 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    mainList.add(dataSnapshot.getKey());
+                    keyList.add(dataSnapshot.getKey());
                 }
 
-                for (int i = 0; i < mainList.size(); i++) {
-                    mDatabase.child(mainList.get(i)).addValueEventListener(new ValueEventListener() {
+                for (int i = 0; i < keyList.size(); i++) {
+                    mDatabase.child(keyList.get(i)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -123,19 +120,24 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     }
 
     private void expandableListWorking() {
+
         expandableListViewExample = findViewById(R.id.expandableListViewSample);
 
-        HashMap<String, List<String>> a = new HashMap<>();
-        List<String> a1 = new ArrayList<>();
-        for (int i = 0; i < rvList.size(); i++) {
-            a1.add(rvList.get(i).getApp());
+        HashMap<String, List<PasswordModel>> a = new HashMap<>();
+
+        List<PasswordModel> valueList;
+
+        for (int i = 0; i < keyList.size(); i++) {
+            valueList = new ArrayList<>();
+            for (int k = 0; k < rvList.size(); k++) {
+                valueList.add(rvList.get(k));
+            }
+            a.put(keyList.get(i), valueList);
+
         }
 
-        for (int i = 0; i < mainList.size(); i++) {
-            a.put(mainList.get(i), a1);
-        }
         expandableDetailList = a;
-        expandableTitleList = new ArrayList<String>(expandableDetailList.keySet());
+        expandableTitleList = new ArrayList<>(expandableDetailList.keySet());
         expandableListAdapter = new CustomizedExpandableListAdapter(this, expandableTitleList, expandableDetailList);
         expandableListViewExample.setAdapter(expandableListAdapter);
 
@@ -143,7 +145,9 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         expandableListViewExample.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " List Expanded.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        expandableTitleList.get(groupPosition) + " List Expanded.",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -151,7 +155,9 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         expandableListViewExample.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " List Collapsed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),
+                        expandableTitleList.get(groupPosition) + " List Collapsed.",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -160,12 +166,11 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition)
-                        + " -> "
-                        + expandableDetailList.get(
-                        expandableTitleList.get(groupPosition)).get(
-                        childPosition), Toast.LENGTH_SHORT
-                ).show();
+
+                Toast.makeText(getApplicationContext(),
+                        expandableTitleList.get(groupPosition) + " -> " + expandableDetailList.get(
+                                expandableTitleList.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
+
                 return false;
             }
         });

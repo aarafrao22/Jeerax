@@ -15,11 +15,11 @@ public class CustomizedExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> expandableTitleList;
-    private HashMap<String, List<String>> expandableDetailList;
+    private HashMap<String, List<PasswordModel>> expandableDetailList;
 
     // constructor
     public CustomizedExpandableListAdapter(Context context, List<String> expandableListTitle,
-                                           HashMap<String, List<String>> expandableListDetail) {
+                                           HashMap<String, List<PasswordModel>> expandableListDetail) {
         this.context = context;
         this.expandableTitleList = expandableListTitle;
         this.expandableDetailList = expandableListDetail;
@@ -40,15 +40,14 @@ public class CustomizedExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     // Gets a View that displays the data for the given child within the given group.
-    public View getChildView(int lstPosn, final int expanded_ListPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
-        final String expandedListText = (String) getChild(lstPosn, expanded_ListPosition);
+    public View getChildView(int listPosition, final int expanded_ListPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        final PasswordModel expandedListText = (PasswordModel) getChild(listPosition, expanded_ListPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
         TextView expandedListTextView = (TextView) convertView.findViewById(R.id.expandedListItem);
-        expandedListTextView.setText(expandedListText);
+        expandedListTextView.setText(expandedListText.getApp());
         return convertView;
     }
 
