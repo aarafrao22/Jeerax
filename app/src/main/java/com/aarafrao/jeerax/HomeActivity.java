@@ -62,11 +62,30 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     mainList.add(dataSnapshot.getKey());
-
                 }
-                expandableListWorking();
+
+                for (int i = 0; i < mainList.size(); i++) {
+                    mDatabase.child(mainList.get(i)).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
+                                rvList.add(pd);
+
+                            }
+                            expandableListWorking();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
 
             }
 
@@ -108,7 +127,9 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
         HashMap<String, List<String>> a = new HashMap<>();
         List<String> a1 = new ArrayList<>();
-        a1.add("FB");
+        for (int i = 0; i < rvList.size(); i++) {
+            a1.add(rvList.get(i).getApp());
+        }
 
         for (int i = 0; i < mainList.size(); i++) {
             a.put(mainList.get(i), a1);
