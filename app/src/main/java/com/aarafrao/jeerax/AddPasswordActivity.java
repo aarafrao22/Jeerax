@@ -44,6 +44,7 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
 
     private ActivityAddPasswordBinding binding;
     private ArrayList<String> paths;
+    private int selectedIndex = 0;
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetLayoutBinding binding2;
     private MaterialCheckBox checkDIgits, checkAlpha, checkSymbol;
@@ -142,6 +143,7 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
 
                             mDatabase.child("passwords")
                                     .child(Constants.ID)
+                                    .child(paths.get(selectedIndex))
                                     .child(binding.edName.getText().toString())
                                     .setValue(p);
 
@@ -200,6 +202,7 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        selectedIndex = i;
         if (paths.get(i).equals("+Add")) {
             showAddCategoryDialogue();
         }
@@ -215,7 +218,9 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
         builder1.setView(input);
         builder1.setPositiveButton("OK", (dialog, which) -> {
             String text = input.getText().toString();
-            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+            paths.add(0, text);
+            selectedIndex = 0;
+            binding.spinner.setSelection(0);
 
             //make list on firebase
             dialog.dismiss();
