@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements OnItemClickListener {
+public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     RvAdapter rvAdapter;
@@ -43,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     HashMap<String, List<PasswordModel>> expandableDetailList;
 
     HashMap<String, List<PasswordModel>> a = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +117,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 //        });
         //fetch list from Firebase
 
-        rvAdapter = new RvAdapter(rvList, this, getApplicationContext());
+        rvAdapter = new RvAdapter(rvList, getApplicationContext());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(rvAdapter);
@@ -158,23 +159,20 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
         expandableListViewExample.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
 
-            Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " -> " + expandableDetailList.get(
-                    expandableTitleList.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " -> " +
+//                    expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
+
+            showAlertDialogue2(
+                    expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getApp(),
+                    "Email:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getEmail() +
+                            "\n\nPassword:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getPassword() +
+                            "\n\nHashed:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getHashed(),
+                    R.drawable.lock_fill);
 
             return false;
         });
     }
 
-    @Override
-    public void onItemClick(int pos) {
-        showAlertDialogue2(
-                rvList.get(pos).getApp(),
-                "Email:   " + rvList.get(pos).getEmail() +
-                        "\nPassword:   " + rvList.get(pos).getPassword() +
-                        "\nHashed:   " + rvList.get(pos).getHashed(),
-
-                R.drawable.lock_fill);
-    }
 
     private void showAlertDialogue2(String title, String message, int icon) {
 
@@ -187,8 +185,12 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         builder1.setPositiveButton(
                 "COPY",
                 (dialog, id) -> {
+
+                    String[] copiedData = message.split("Password: ");
+                    String[] password = copiedData[1].split("\n");
+
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText(title, message);
+                    ClipData clip = ClipData.newPlainText(title, password[0]);
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(getApplicationContext(), "Password Copied!", Toast.LENGTH_SHORT).show();
                 });

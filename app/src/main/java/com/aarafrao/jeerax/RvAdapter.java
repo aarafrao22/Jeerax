@@ -16,13 +16,11 @@ import java.util.ArrayList;
 
 public class RvAdapter extends RecyclerView.Adapter<RvAdapter.VH> {
     private ArrayList<PasswordModel> itemModelArrayList;
-    private final OnItemClickListener listener;
     private Context context;
 
 
-    public RvAdapter(ArrayList<PasswordModel> itemModelArrayList, OnItemClickListener listener, Context context) {
+    public RvAdapter(ArrayList<PasswordModel> itemModelArrayList, Context context) {
         this.itemModelArrayList = itemModelArrayList;
-        this.listener = listener;
         this.context = context;
     }
 
@@ -44,7 +42,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.VH> {
         return itemModelArrayList.size();
     }
 
-    public class VH extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class VH extends RecyclerView.ViewHolder {
         private TextView txt;
         private ImageView img;
 
@@ -54,15 +52,8 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.VH> {
             txt = itemView.txtName;
 
 
-            itemView.getRoot().setOnClickListener(this);
-
-
         }
 
-        @Override
-        public void onClick(View view) {
-            listener.onItemClick(getAdapterPosition());
-        }
     }
 }
 
