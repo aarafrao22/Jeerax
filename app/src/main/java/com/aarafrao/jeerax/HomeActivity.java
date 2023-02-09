@@ -42,7 +42,6 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     List<String> expandableTitleList;
     HashMap<String, List<PasswordModel>> expandableDetailList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +49,6 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
-
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child(Constants.ID);
         binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
@@ -65,6 +63,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
                 }
 
                 for (int i = 0; i < keyList.size(); i++) {
+                    rvList = new ArrayList<>();
                     mDatabase.child(keyList.get(i)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -124,51 +123,41 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
         HashMap<String, List<PasswordModel>> a = new HashMap<>();
 
-        List<PasswordModel> valueList;
+        List<PasswordModel> valueList = new ArrayList<>();
 
         for (int i = 0; i < keyList.size(); i++) {
-            valueList = new ArrayList<>(rvList);
-            a.put(keyList.get(i), valueList);
+            valueList = new ArrayList<>();
+            for (int k = 0; k < rvList.size(); k++) {
+                valueList.add(rvList.get(k));
+            }
 
+            a.put(keyList.get(i), valueList);
         }
 
+//        rvList = new ArrayList<>();
+//        valueList = new ArrayList<>();
         expandableDetailList = a;
         expandableTitleList = new ArrayList<>(expandableDetailList.keySet());
         expandableListAdapter = new CustomizedExpandableListAdapter(this, expandableTitleList, expandableDetailList);
         expandableListViewExample.setAdapter(expandableListAdapter);
 
         // This method is called when the group is expanded
-        expandableListViewExample.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        expandableTitleList.get(groupPosition) + " List Expanded.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        expandableListViewExample.setOnGroupExpandListener(groupPosition -> Toast.makeText(getApplicationContext(),
+                expandableTitleList.get(groupPosition) + " List Expanded.",
+                Toast.LENGTH_SHORT).show());
 
         // This method is called when the group is collapsed
-        expandableListViewExample.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        expandableTitleList.get(groupPosition) + " List Collapsed.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        expandableListViewExample.setOnGroupCollapseListener(groupPosition -> Toast.makeText(getApplicationContext(),
+                expandableTitleList.get(groupPosition) + " List Collapsed.",
+                Toast.LENGTH_SHORT).show());
 
 
-        expandableListViewExample.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
+        expandableListViewExample.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
 
-                Toast.makeText(getApplicationContext(),
-                        expandableTitleList.get(groupPosition) + " -> " + expandableDetailList.get(
-                                expandableTitleList.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " -> " + expandableDetailList.get(
+                    expandableTitleList.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
 
-                return false;
-            }
+            return false;
         });
     }
 
