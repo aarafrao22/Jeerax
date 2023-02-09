@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
@@ -40,8 +39,10 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
     ExpandableListView expandableListViewExample;
     ExpandableListAdapter expandableListAdapter;
     List<String> expandableTitleList;
+    String key;
     HashMap<String, List<PasswordModel>> expandableDetailList;
 
+    HashMap<String, List<PasswordModel>> a = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
         binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
         rvList = new ArrayList<>();
 
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -63,17 +65,19 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
                 }
 
                 for (int i = 0; i < keyList.size(); i++) {
-                    rvList = new ArrayList<>();
+
+                    key = keyList.get(i);
                     mDatabase.child(keyList.get(i)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            rvList = new ArrayList<>();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                                 PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
                                 rvList.add(pd);
 
                             }
-                            expandableListWorking();
+                            expandableListWorking(rvList, snapshot.getKey());
                         }
 
                         @Override
@@ -81,6 +85,8 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
                         }
                     });
+
+
                 }
             }
 
@@ -117,22 +123,20 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
     }
 
-    private void expandableListWorking() {
+    private void expandableListWorking(ArrayList<PasswordModel> rvList, String key) {
 
         expandableListViewExample = findViewById(R.id.expandableListViewSample);
 
-        HashMap<String, List<PasswordModel>> a = new HashMap<>();
 
         List<PasswordModel> valueList = new ArrayList<>();
 
-        for (int i = 0; i < keyList.size(); i++) {
-            valueList = new ArrayList<>();
-            for (int k = 0; k < rvList.size(); k++) {
-                valueList.add(rvList.get(k));
-            }
 
-            a.put(keyList.get(i), valueList);
+        for (int k = 0; k < rvList.size(); k++) {
+            valueList.add(rvList.get(k));
         }
+
+        a.put(key, valueList);
+
 
 //        rvList = new ArrayList<>();
 //        valueList = new ArrayList<>();
