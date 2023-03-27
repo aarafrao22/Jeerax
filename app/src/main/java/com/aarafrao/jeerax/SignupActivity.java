@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.aarafrao.jeerax.databinding.ActivitySignupBinding;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+//import com.warrenstrange.googleauth.GoogleAuthenticator;
+//import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 
 import org.signal.argon2.Argon2;
 import org.signal.argon2.Argon2Exception;
@@ -46,6 +49,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     SharedPreferences.Editor editor;
     private ActivitySignupBinding binding;
 
+    /* private TextView secretKeyTextView;
+   * public String generateSecretKey() {
+         GoogleAuthenticator gAuth = new GoogleAuthenticator();
+         GoogleAuthenticatorKey key = gAuth.createCredentials();
+         String secretKey = key.getKey();
+         return secretKey;
+     }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,23 +100,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        edPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                checkInputs();
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         btnSignUp.setOnClickListener(v -> {
 
@@ -117,14 +110,17 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 check1lowercase.setChecked(true);
                 check1no.setChecked(true);
                 checkEmailAndPassword();
-                editor.putString("main", edPassword.getText().toString());
-                editor.apply();
 
-                Toast.makeText(SignupActivity.this, "Password Saved", Toast.LENGTH_SHORT).show();
+                binding.edMasterPass.setError(null);
+                Toast.makeText(SignupActivity.this, "String Password Now!", Toast.LENGTH_SHORT).show();
 
             } else {
-                Toast.makeText(SignupActivity.this, "Password is Weak", Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(SignupActivity.this,
+//                        "At least 12 characters long\n"  +
+//                        "At least 1 number\n" +
+//                        "At least 1 lowercase letter\n" +
+//                        "At least 1 uppercase letter\n" +
+//                        "At least 1 special character", Toast.LENGTH_SHORT).show();
                 if (hasNumberRegex(edPassword.getText().toString())) {
                     check1no.setChecked(true);
 
@@ -140,16 +136,25 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                 if (isLongerThan11(edPassword.getText().toString())) {
                                     checkA12.setChecked(true);
 
-                                }
+                                } else
+                                    binding.edMasterPass.setError("Length Must be greater than 11 characters");
 
-                            }
+                            } else
+                                binding.edMasterPass.setError("Must contain a special character");
 
-                        }
-                    }
-                }
+                        } else binding.edMasterPass.setError("Must contain an upper case letter");
+
+                    } else binding.edMasterPass.setError("Must contain a lower case letter");
+
+                } else
+                    binding.edMasterPass.setError("Must contain a number");
+
             }
 
         });
+        /*secretKeyTextView = findViewById(R.id.textView4);
+        String secretKey = generateSecretKey();
+        secretKeyTextView.setText(secretKey);*/
     }
 
     public static byte[] generateSalt() {
@@ -242,40 +247,55 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void checkEmailAndPassword() {
 
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
-        if (edEmail.getText().toString().matches(emailPattern)) {
+        if (!edEmail.getText().toString().equals("")) {
+            if (!binding.edReminder1.getText().toString().equals("")) {
+                if (!binding.edMasterPass1.getText().toString().equals("")) {
+                    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+                    if (edEmail.getText().toString().matches(emailPattern)) {
 
-            btnSignUp.setEnabled(false);
-            btnSignUp.setTextColor(Color.argb(50, 255, 255, 255));
+                        btnSignUp.setEnabled(false);
+                        btnSignUp.setTextColor(Color.argb(50, 255, 255, 255));
 
-            String mail = edEmail.getText().toString();
-            String pass = edPassword.getText().toString();
-            saveData(mail, edName.getText().toString(), pass);
+                        binding.edName.setError(null);
+                        binding.edReminder.setError(null);
+                        binding.edMasterPass.setError(null);
 
-            firebaseAuth.createUserWithEmailAndPassword(mail, pass)
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                        String mail = edEmail.getText().toString();
+                        String pass = edPassword.getText().toString();
+                        saveData(mail, edName.getText().toString(), pass);
+
+                        firebaseAuth.createUserWithEmailAndPassword(mail, pass)
+                                .addOnCompleteListener(this, task -> {
+                                    if (task.isSuccessful()) {
+                                        editor.putString("main", edPassword.getText().toString());
+                                        editor.apply();
+                                        FirebaseUser user = firebaseAuth.getCurrentUser();
 //                                updateUI(user);
-                            rootNode = FirebaseDatabase.getInstance();
-                            reference = rootNode.getReference("users");
-                            String hashed = encryp(edPassword.getText().toString());
+                                        rootNode = FirebaseDatabase.getInstance();
+                                        reference = rootNode.getReference("users");
+                                        String hashed = encryp(edPassword.getText().toString());
 
-                            UserHelper userHelper = new UserHelper(
-                                    edName.getText().toString(),
-                                    edPassword.getText().toString(),
-                                    edEmail.getText().toString(), hashed
-                            );
+                                        UserHelper userHelper = new UserHelper(
+                                                edName.getText().toString(),
+                                                edPassword.getText().toString(),
+                                                edEmail.getText().toString(), hashed
+                                        );
 
-                            reference.child(Constants.ID).setValue(userHelper);
-                            sendToMainActivity(edName.getText().toString());
+                                        reference.child(Constants.ID).setValue(userHelper);
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                        sendToMainActivity(edName.getText().toString());
 
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Toast.makeText(getApplicationContext(), "sign in failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                    } else binding.edName.setError("Invalid Email");
+                } else binding.edMasterPass.setError("Invalid Password");
+            } else binding.edReminder.setError("Invalid Reminder");
+        } else {
+            binding.edName.setError("Invalid Email");
         }
     }
 
@@ -313,9 +333,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initViews() {
         tvAlreadyHave = findViewById(R.id.sign_up_already_have);
-        edEmail = findViewById(R.id.edName);
-        edPassword = findViewById(R.id.edMasterPass);
-        edName = findViewById(R.id.edReminder);
+        edEmail = findViewById(R.id.edName1);
+        edPassword = findViewById(R.id.edMasterPass1);
+        edName = findViewById(R.id.edReminder1);
         btnSignUp = findViewById(R.id.btnContinue);
         checkA12 = findViewById(R.id.checkA12);
         check1no = findViewById(R.id.check1no);

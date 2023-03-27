@@ -48,8 +48,8 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetLayoutBinding binding2;
     private MaterialCheckBox checkDIgits, checkAlpha, checkSymbol;
-    private TextView txtMain;
     private DatabaseReference mDatabase;
+    private TextView txtMain;
     private String generatedPassword = "";
     private Slider seekbar;
     private MaterialButton btnUsePassword;

@@ -28,6 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         mainPass = prefs.getString("main", "No name defined");
 
         new Handler().postDelayed(() -> {
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 
             if (!mainPass.equals("No name defined"))
                 startActivity(new Intent(getApplicationContext(), AskActivity.class));

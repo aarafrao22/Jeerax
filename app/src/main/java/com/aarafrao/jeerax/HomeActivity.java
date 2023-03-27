@@ -3,6 +3,7 @@ package com.aarafrao.jeerax;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,9 +15,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aarafrao.jeerax.databinding.ActivityHomeBinding;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.slider.Slider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +31,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity {
+    private String ALLOWED_CHARACTERS = "{}[]%^;':,.?/0123456789qwertyuiopasdfghjklzxcvbnm";
 
     ActivityHomeBinding binding;
     RvAdapter rvAdapter;
@@ -42,7 +49,12 @@ public class HomeActivity extends AppCompatActivity {
     String key;
     HashMap<String, List<PasswordModel>> expandableDetailList;
 
-    HashMap<String, List<PasswordModel>> a = new HashMap<>();
+    private TextView txtMain;
+    private String generatedPassword = "";
+    private Slider seekbar;
+    private MaterialButton btnUsePassword;
+    HashMap<String, List<PasswordModel>> listHashMap = new HashMap<>();
+    private BottomSheetBehavior bottomSheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +63,26 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         editor = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE).edit();
+        ConstraintLayout bottomSheetLayout = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
+        txtMain = findViewById(R.id.txtMain);
+        seekbar = findViewById(R.id.seekbar);
+        btnUsePassword = findViewById(R.id.btnUse);
 
+
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        String v1 = getRandomString((int) 10);
+        txtMain.setText(v1);
+        btnUsePassword.setOnClickListener(v -> copyToClipboard(generatedPassword, getApplicationContext()));
+
+
+        seekbar.addOnChangeListener((slider, value, fromUser) -> txtMain.setText(getRandomString((int) value)));
         mDatabase = FirebaseDatabase.getInstance().getReference().child("passwords").child(Constants.ID);
         binding.floatingActionButton.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, AddPasswordActivity.class)));
         rvList = new ArrayList<>();
 
+        binding.btnGenerate.setOnClickListener(v -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -97,25 +124,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-//        mDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//
-//                    PasswordModel pd = dataSnapshot.getValue(PasswordModel.class);
-//                    rvList.add(pd);
-//
-//                }
-//
-//                rvAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-        //fetch list from Firebase
 
         rvAdapter = new RvAdapter(rvList, getApplicationContext());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -123,6 +131,24 @@ public class HomeActivity extends AppCompatActivity {
         binding.recyclerView.setAdapter(rvAdapter);
 
     }
+
+    public static void copyToClipboard(String text, Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("label", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(context, "Password copied!", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private String getRandomString(final int sizeOfRandomString) {
+        final Random random = new Random();
+        final StringBuilder sb = new StringBuilder(sizeOfRandomString);
+        for (int i = 0; i < sizeOfRandomString; ++i)
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+        generatedPassword = sb.toString();
+        return sb.toString();
+    }
+
 
     private void expandableListWorking(ArrayList<PasswordModel> rvList, String key) {
 
@@ -136,22 +162,17 @@ public class HomeActivity extends AppCompatActivity {
             valueList.add(rvList.get(k));
         }
 
-        a.put(key, valueList);
+        listHashMap.put(key, valueList);
 
-
-//        rvList = new ArrayList<>();
-//        valueList = new ArrayList<>();
-        expandableDetailList = a;
+        expandableDetailList = listHashMap;
         expandableTitleList = new ArrayList<>(expandableDetailList.keySet());
         expandableListAdapter = new CustomizedExpandableListAdapter(this, expandableTitleList, expandableDetailList);
         expandableListViewExample.setAdapter(expandableListAdapter);
 
-        // This method is called when the group is expanded
         expandableListViewExample.setOnGroupExpandListener(groupPosition -> Toast.makeText(getApplicationContext(),
                 expandableTitleList.get(groupPosition) + " List Expanded.",
                 Toast.LENGTH_SHORT).show());
 
-        // This method is called when the group is collapsed
         expandableListViewExample.setOnGroupCollapseListener(groupPosition -> Toast.makeText(getApplicationContext(),
                 expandableTitleList.get(groupPosition) + " List Collapsed.",
                 Toast.LENGTH_SHORT).show());
@@ -159,15 +180,10 @@ public class HomeActivity extends AppCompatActivity {
 
         expandableListViewExample.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
 
-//            Toast.makeText(getApplicationContext(), expandableTitleList.get(groupPosition) + " -> " +
-//                    expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
-
-            showAlertDialogue2(
-                    expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getApp(),
+            showAlertDialogue2(expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getApp(),
                     "Email:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getEmail() +
                             "\n\nPassword:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getPassword() +
-                            "\n\nHashed:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getHashed(),
-                    R.drawable.lock_fill);
+                            "\n\nHashed:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getHashed(), R.drawable.lock_fill);
 
             return false;
         });

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Jeerax</string>
+    <string name="auth">connect your google authenticator using the the key below</string>
 </resources>

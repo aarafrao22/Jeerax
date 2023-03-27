@@ -2,7 +2,7 @@ package com.aarafrao.jeerax;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricPrompt;
+//import androidx.biometric.BiometricPrompt;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,12 +47,11 @@ public class AskActivity extends AppCompatActivity {
         });
 
 
-
-        binding.imgFingerprint.setOnClickListener(v -> authenticate());
+        //  binding.imgFingerprint.setOnClickListener(v -> authenticate());
 
     }
 
-    private void authenticate() {
+   /* private void authenticate() {
         BiometricPrompt biometricPrompt = new BiometricPrompt(AskActivity.this, runnable -> {
         }, new BiometricPrompt.AuthenticationCallback() {
             @Override
@@ -78,6 +77,6 @@ public class AskActivity extends AppCompatActivity {
 
         BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("Biometric login for my app").setSubtitle("Log in using your biometric credential").setNegativeButtonText("Use account password").build();
         biometricPrompt.authenticate(promptInfo);
-    }
+    }*/
 
 }

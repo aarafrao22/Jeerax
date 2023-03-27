@@ -24,12 +24,13 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESEncryption {
-    private static final String SECRET_KEY = "123456789";
+    private static final String SECRET_KEY = "vdhk vha] hguhlvdm 1357";
     private static final String SALTVALUE = "abcdefg";
     private static final String ALGORITHM = "AES";
     private static final String KEY = "YourSecretKeyValueHere";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    //generating the key dynamically using the generateKey method line 42
     public static String encryptWithAES(String value) throws Exception {
         Key key = generateKey();
         Cipher cipher = Cipher.getInstance(AESEncryption.ALGORITHM);
