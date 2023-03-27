@@ -83,7 +83,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnSignIn.setOnClickListener(v -> {
             checkEmailAndPassword();
-            users.getMultiFactor().getSession().addOnCompleteListener(new OnCompleteListener<MultiFactorSession>() {
+            FirebaseAuth.getInstance()
+                    .getCurrentUser()
+                    .getMultiFactor().getSession().addOnCompleteListener(new OnCompleteListener<MultiFactorSession>() {
                 @Override
                 public void onComplete(@NonNull Task<MultiFactorSession> task) {
                     if (task.isSuccessful()) {
@@ -98,15 +100,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onVerificationCompleted(PhoneAuthCredential credential) {
-                    // This callback will be invoked in two situations:
-                    // 1) Instant verification. In some cases, the phone number can be
-                    //    instantly verified without needing to send or enter a verification
-                    //    code. You can disable this feature by calling
-                    //    PhoneAuthOptions.builder#requireSmsValidation(true) when building
-                    //    the options to pass to PhoneAuthProvider#verifyPhoneNumber().
-                    // 2) Auto-retrieval. On some devices, Google Play services can
-                    //    automatically detect the incoming verification SMS and perform
-                    //    verification without user action.
                     this.credential = credential;
                 }
 
@@ -127,10 +120,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
-                    // The SMS verification code has been sent to the provided phone number.
-                    // We now need to ask the user to enter the code and then construct a
-                    // credential by combining the code with a verification ID.
-                    // Save the verification ID and resending token for later use.
                     this.verificationId = verificationId;
                     this.forceResendingToken = token;
                     // ...

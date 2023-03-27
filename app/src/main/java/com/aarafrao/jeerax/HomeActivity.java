@@ -1,12 +1,5 @@
 package com.aarafrao.jeerax;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -17,6 +10,13 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.aarafrao.jeerax.databinding.ActivityHomeBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        String v1 = getRandomString((int) 10);
+        String v1 = getRandomString(10);
         txtMain.setText(v1);
         btnUsePassword.setOnClickListener(v -> copyToClipboard(generatedPassword, getApplicationContext()));
 
@@ -84,6 +84,13 @@ public class HomeActivity extends AppCompatActivity {
 
         binding.btnGenerate.setOnClickListener(v -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
+        binding.imgLogout.setOnClickListener(v -> {
+            SharedPreferences prefs = getSharedPreferences("MAIN_PASSWORD", MODE_PRIVATE);
+            SharedPreferences.Editor myEdit = prefs.edit();
+            myEdit.putString("main", "No name defined").apply();
+            sendToLoginActivity();
+
+        });
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -130,6 +137,11 @@ public class HomeActivity extends AppCompatActivity {
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(rvAdapter);
 
+    }
+
+    private void sendToLoginActivity() {
+        startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+        finish();
     }
 
     public static void copyToClipboard(String text, Context context) {

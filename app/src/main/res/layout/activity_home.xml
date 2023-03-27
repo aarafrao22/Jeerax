@@ -32,6 +32,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ImageView
+            android:id="@+id/imgLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:padding="8dp"
+            android:src="@drawable/logout_circle_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            app:tint="@color/purple_700" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="0dp"
@@ -44,7 +55,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.86" />
+            app:layout_constraintWidth_percent="0.7" />
 
         <TextView
             android:id="@+id/textView2"
