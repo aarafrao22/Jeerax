@@ -133,11 +133,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             if (hasSpecialCharacter(edPassword.getText().toString())) {
                                 check1SpecialCharacter.setChecked(true);
 
-                                if (isLongerThan11(edPassword.getText().toString())) {
+                                if (isLongerThan8(edPassword.getText().toString())) {
                                     checkA12.setChecked(true);
 
                                 } else
-                                    binding.edMasterPass.setError("Length Must be greater than 11 characters");
+                                    binding.edMasterPass.setError("Must contain at least 8 characters");
 
                             } else
                                 binding.edMasterPass.setError("Must contain a special character");
@@ -188,7 +188,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    public static boolean isLongerThan11(String password) {
+    public static boolean isLongerThan8(String password) {
         Pattern pattern = Pattern.compile(".{8,}");
         Matcher matcher = pattern.matcher(password);
         return matcher.find();
@@ -281,6 +281,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                                 edEmail.getText().toString(), hashed
                                         );
 
+//                                        registerAuthy();
                                         reference.child(Constants.ID).setValue(userHelper);
 
                                         sendToMainActivity(edName.getText().toString());

@@ -74,7 +74,12 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         String v1 = getRandomString(10);
         txtMain.setText(v1);
-        btnUsePassword.setOnClickListener(v -> copyToClipboard(generatedPassword, getApplicationContext()));
+        btnUsePassword.setOnClickListener(v ->
+                copyToClipboard(
+                        generatedPassword,
+                        getApplicationContext()
+                )
+        );
 
 
         seekbar.addOnChangeListener((slider, value, fromUser) -> txtMain.setText(getRandomString((int) value)));
@@ -140,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void sendToLoginActivity() {
-        startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         finish();
     }
 

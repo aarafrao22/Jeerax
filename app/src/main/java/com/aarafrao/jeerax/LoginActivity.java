@@ -1,8 +1,5 @@
 package com.aarafrao.jeerax;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,22 +12,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-//import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.MultiFactorSession;
 import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-
-import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView tvDontHave;
@@ -86,13 +81,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             FirebaseAuth.getInstance()
                     .getCurrentUser()
                     .getMultiFactor().getSession().addOnCompleteListener(new OnCompleteListener<MultiFactorSession>() {
-                @Override
-                public void onComplete(@NonNull Task<MultiFactorSession> task) {
-                    if (task.isSuccessful()) {
-                        MultiFactorSession multiFactorSession = task.getResult();
-                    }
-                }
-            });
+                        @Override
+                        public void onComplete(@NonNull Task<MultiFactorSession> task) {
+                            if (task.isSuccessful()) {
+                                MultiFactorSession multiFactorSession = task.getResult();
+                            }
+                        }
+                    });
             PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 private PhoneAuthProvider.ForceResendingToken forceResendingToken;
                 private String verificationId;
@@ -185,10 +180,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
             } else {
-                Toast.makeText(this, "Incorrect Email or Password", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Incorrect Email or Password", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
     private void enable() {
         btnSignIn.setEnabled(true);
