@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,6 +57,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         binding.BtnVerify.setOnClickListener(view -> {
             if (!binding.edPhone.getText().equals("")) {
                 requestCode();
+            }
+        });
+        binding.BtnVerify2.setOnClickListener(view -> {
+            if (!binding.edCode.getText().equals("")) {
+                finalVerification(verificationId);
             }
         });
 
@@ -93,51 +100,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnSignIn.setOnClickListener(v -> {
             checkEmailAndPassword();
-            FirebaseAuth.getInstance().getCurrentUser().getMultiFactor().getSession().addOnCompleteListener(new OnCompleteListener<MultiFactorSession>() {
-                @Override
-                public void onComplete(@NonNull Task<MultiFactorSession> task) {
-                    if (task.isSuccessful()) {
-                        MultiFactorSession multiFactorSession = task.getResult();
-                    }
-                }
-            });
-            PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                private PhoneAuthProvider.ForceResendingToken forceResendingToken;
-                private String verificationId;
-                private PhoneAuthCredential credential;
-
-                @Override
-                public void onVerificationCompleted(PhoneAuthCredential credential) {
-                    this.credential = credential;
-                }
-
-                @Override
-                public void onVerificationFailed(FirebaseException e) {
-                    // This callback is invoked in response to invalid requests for
-                    // verification, like an incorrect phone number.
-                    if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                        // Invalid request
-                        // ...
-                    } else if (e instanceof FirebaseTooManyRequestsException) {
-                        // The SMS quota for the project has been exceeded
-                        // ...
-                    }
-                    // Show a message and update the UI
-                    // ...
-                }
-
-                @Override
-                public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
-                    this.verificationId = verificationId;
-                    this.forceResendingToken = token;
-                    // ...
-                }
-            };
-//            PhoneAuthProvider.verifyPhoneNumber(phoneAuthOptions);
-            // Ask user for the verification code.
-
-//            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, verificationCode);
-
             saveData();
         });
 
@@ -151,21 +113,51 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 binding.edCode.setVisibility(View.VISIBLE);
+                binding.BtnVerify2.setVisibility(View.VISIBLE);
                 verificationId = s;
                 Toast.makeText(LoginActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
                 binding.BtnVerify.setVisibility(View.INVISIBLE);
+
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-
+                Toast.makeText(LoginActivity.this, "FAILED"+e, Toast.LENGTH_SHORT).show();
+                Log.d("FAILED",e.toString());
             }
 
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 //SendToMainActivity
+                Toast.makeText(LoginActivity.this, "COMPLETED", Toast.LENGTH_SHORT).show();
+
             }
         });
+    }
+
+    private void finalVerification(String s) {
+        if (s != null) {
+            if (!binding.edCode.getText().toString().equals("")) {
+                PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(s, binding.edCode.getText().toString());
+                FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Verified", Toast.LENGTH_SHORT).show();
+
+                            binding.edCode.setVisibility(View.GONE);
+                            binding.edPhone.setVisibility(View.GONE);
+                            binding.BtnVerify.setVisibility(View.GONE);
+                            binding.BtnVerify2.setVisibility(View.GONE);
+                            binding.btnSignIn.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Enter Code First", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 //    private String phoneNumber;
