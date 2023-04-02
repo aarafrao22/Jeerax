@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.aarafrao.jeerax.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -27,8 +28,11 @@ import com.google.firebase.auth.MultiFactorSession;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.util.concurrent.TimeUnit;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView tvDontHave;
+
     private TextInputEditText edEmail, edPassword;
     private Button btnSignIn;
     private FirebaseAuth firebaseAuth;
@@ -36,13 +40,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     SharedPreferences.Editor editor;
     FirebaseUser users;
     String verificationId;
+    ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initViews();
+
+
+        binding.BtnVerify.setOnClickListener(view -> {
+            if (!binding.edPhone.getText().equals("")) {
+                requestCode();
+            }
+        });
+
         edEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -78,16 +93,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnSignIn.setOnClickListener(v -> {
             checkEmailAndPassword();
-            FirebaseAuth.getInstance()
-                    .getCurrentUser()
-                    .getMultiFactor().getSession().addOnCompleteListener(new OnCompleteListener<MultiFactorSession>() {
-                        @Override
-                        public void onComplete(@NonNull Task<MultiFactorSession> task) {
-                            if (task.isSuccessful()) {
-                                MultiFactorSession multiFactorSession = task.getResult();
-                            }
-                        }
-                    });
+            FirebaseAuth.getInstance().getCurrentUser().getMultiFactor().getSession().addOnCompleteListener(new OnCompleteListener<MultiFactorSession>() {
+                @Override
+                public void onComplete(@NonNull Task<MultiFactorSession> task) {
+                    if (task.isSuccessful()) {
+                        MultiFactorSession multiFactorSession = task.getResult();
+                    }
+                }
+            });
             PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 private PhoneAuthProvider.ForceResendingToken forceResendingToken;
                 private String verificationId;
@@ -129,6 +142,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
 
+    }
+
+    private void requestCode() {
+
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(binding.edPhone.getText().toString(), 60, TimeUnit.SECONDS, LoginActivity.this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                binding.edCode.setVisibility(View.VISIBLE);
+                verificationId = s;
+                Toast.makeText(LoginActivity.this, "Code Sent", Toast.LENGTH_SHORT).show();
+                binding.BtnVerify.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+
+            }
+
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                //SendToMainActivity
+            }
+        });
     }
 
 //    private String phoneNumber;

@@ -1,15 +1,22 @@
 package com.aarafrao.jeerax;
 
 public class PasswordModel {
-    String email, password, app, hashed, date;
+    String email, password, app, encrypted, date;
 
-
-    public PasswordModel(String email, String password, String app, String hashed, String date) {
+    public PasswordModel(String email, String password, String app, String encrypted, String date) {
         this.email = email;
         this.password = password;
         this.app = app;
-        this.hashed = hashed;
+        this.encrypted = encrypted;
         this.date = date;
+    }
+
+    public String getEncrypted() {
+        return encrypted;
+    }
+
+    public void setEncrypted(String encrypted) {
+        this.encrypted = encrypted;
     }
 
     public String getDate() {
@@ -18,14 +25,6 @@ public class PasswordModel {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getHashed() {
-        return hashed;
-    }
-
-    public void setHashed(String hashed) {
-        this.hashed = hashed;
     }
 
     public String getEmail() {

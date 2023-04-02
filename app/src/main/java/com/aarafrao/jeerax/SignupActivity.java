@@ -1,7 +1,5 @@
 package com.aarafrao.jeerax;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.aarafrao.jeerax.databinding.ActivitySignupBinding;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -23,8 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-//import com.warrenstrange.googleauth.GoogleAuthenticator;
-//import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 
 import org.signal.argon2.Argon2;
 import org.signal.argon2.Argon2Exception;
