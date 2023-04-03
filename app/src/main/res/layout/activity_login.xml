@@ -75,72 +75,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_email" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/ed_phone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/filled_button"
-        android:backgroundTint="@color/white"
-        android:ems="10"
-        android:hint="Phone"
-        android:inputType="phone"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textColorHint="#9E9C9C"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_password" />
-
-    <ImageButton
-        android:id="@+id/BtnVerify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_margin="16dp"
-        android:padding="8dp"
-        android:src="@drawable/baseline_check_circle_24"
-        app:layout_constraintBottom_toBottomOf="@+id/ed_phone"
-        app:layout_constraintEnd_toEndOf="@+id/ed_phone"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_password" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/ed_code"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/filled_button"
-        android:backgroundTint="@color/white"
-        android:ems="10"
-        android:visibility="invisible"
-        android:hint="Code"
-        android:inputType="number"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textColorHint="#9E9C9C"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ed_phone" />
-
-    <ImageButton
-        android:id="@+id/BtnVerify2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@color/white"
-        android:padding="8dp"
-        android:visibility="invisible"
-        android:src="@drawable/baseline_check_circle_24"
-        app:layout_constraintBottom_toBottomOf="@+id/ed_code"
-        app:layout_constraintEnd_toEndOf="@+id/ed_phone"
-        app:layout_constraintTop_toTopOf="@+id/ed_code" />
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_in"
         android:layout_width="match_parent"
@@ -150,7 +84,6 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/filled_button"
         android:padding="8dp"
-        android:visibility="invisible"
         android:text="Sign In"
         android:textAllCaps="false"
         android:textColor="@color/white"
@@ -168,7 +101,7 @@
         android:textColor="@color/purple_700"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/sign_in_password"
-        app:layout_constraintTop_toBottomOf="@+id/ed_code" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_password" />
 
     <TextView
         android:id="@+id/textView2"
