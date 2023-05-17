@@ -199,7 +199,6 @@ public class HomeActivity extends AppCompatActivity {
 
             showAlertDialogue2(expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getApp(),
                     "Email:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getEmail() +
-                            "\n\nPassword:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getPassword() +
                             "\n\nHashed:   " + expandableDetailList.get(expandableTitleList.get(groupPosition)).get(childPosition).getEncrypted(), R.drawable.lock_fill);
 
             return false;

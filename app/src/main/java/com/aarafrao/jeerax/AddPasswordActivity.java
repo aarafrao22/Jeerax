@@ -135,7 +135,6 @@ public class AddPasswordActivity extends AppCompatActivity implements AdapterVie
 
                             PasswordModel p = new PasswordModel(
                                     binding.edEmail.getText().toString(),
-                                    binding.edPassword.getText().toString(),
                                     binding.edName.getText().toString(),
                                     hashed, String.valueOf(unixTime)
 
